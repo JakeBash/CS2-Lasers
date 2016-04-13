@@ -16,9 +16,24 @@ public class LasersPTUI
     private int rsize;
     private int csize;
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) throws FileNotFoundException
+    {String firstcommand = "";
+        if(args.length==2){
+            firstcommand = args[1];
+        }
+        LasersPTUI lasersPTUI = new LasersPTUI(args[0]);
+        boolean exit = false;
+        while (exit){
+            if (firstcommand.equals(" ")){
 
+            }
+            else {
+                System.out.println(">");
+                Scanner keyboard = new Scanner(System.in);
+
+                int myint = keyboard.nextInt();
+            }
+        }
     }
 
     public LasersPTUI(String filename) throws FileNotFoundException
