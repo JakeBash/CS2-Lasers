@@ -102,7 +102,7 @@ public class LasersPTUI
 
     public void add(int r, int c)
     {
-        if(r > rsize || r < 0 || c > csize || c < 0)
+        if(r >= rsize || r < 0 || c >= csize || c < 0)
         {
             System.out.println("Error adding laser at: (" + r + ", " + c + ")");
         }
@@ -121,7 +121,7 @@ public class LasersPTUI
 
     public void remove(int r, int c)
     {
-        if(r > rsize || r < 0 || c > csize || c < 0)
+        if(r >= rsize || r < 0 || c >= csize || c < 0)
         {
             System.out.println("Error removing laser at: (" + r + ", " + c + ")");
         }
