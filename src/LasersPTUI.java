@@ -36,7 +36,6 @@ public class LasersPTUI
             {
                 command = " ";
             }
-            System.out.println();
             ptui.commandPicker(command);
         }
     }
