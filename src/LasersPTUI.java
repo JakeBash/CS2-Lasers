@@ -171,7 +171,7 @@ public class LasersPTUI
         }
         else
         {
-            //Throw some error
+            //Throw some error poop
         }
     }
 
