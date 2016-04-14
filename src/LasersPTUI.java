@@ -15,12 +15,12 @@ public class LasersPTUI
 
     public static void main(String args[]) throws FileNotFoundException
     {
-        LasersPTUI ptui = new LasersPTUI("test.txt");
+        LasersPTUI ptui = new LasersPTUI(args[0]);
         if(args.length == 2)
         {
             String filename = args[1];
             Scanner sc = new Scanner(new File(filename));
-            while(sc.hasNext())
+            while(sc.hasNextLine())
             {
                 String command = sc.nextLine();
                 ptui.commandPicker(command);
