@@ -16,20 +16,29 @@ public class LasersPTUI
     public static void main(String args[]) throws FileNotFoundException
     {
         LasersPTUI ptui = new LasersPTUI("test.txt");
-        String fc;
         if(args.length == 2)
         {
-            fc = args[1];
+            String filename = args[1];
+            Scanner sc = new Scanner(new File(filename));
+            while(sc.hasNext())
+            {
+                String command = sc.nextLine();
+                ptui.commandPicker(command);
+            }
+            sc.close();
         }
         Scanner kb = new Scanner(System.in);
         while(running == true)
         {
             System.out.print("> ");
-            String command = kb.next();
+            String command = kb.nextLine();
+            if(command.equals(""))
+            {
+                command = " ";
+            }
             System.out.println();
             ptui.commandPicker(command);
         }
-        System.out.println("Program closed");
     }
 
     public LasersPTUI(String filename) throws FileNotFoundException
@@ -53,7 +62,7 @@ public class LasersPTUI
     public void commandPicker(String command)
     {
         String[] pc = command.split(" ");
-        switch (pc[0].toLowerCase().charAt(0))
+        switch (command.toLowerCase().charAt(0))
         {
             case 'h':
                 help();
@@ -65,11 +74,11 @@ public class LasersPTUI
                 }
                 else
                 {
-                    //Throw some error
+                    System.out.println("Incorrect coordinates");
                 }
                 break;
             case 'd':
-                toString();
+                System.out.println(toString());
                 break;
             case 'r':
                 if(pc.length == 3)
@@ -78,7 +87,7 @@ public class LasersPTUI
                 }
                 else
                 {
-                    //Throw some error
+                    System.out.println("Incorrect coordinates");
                 }
                 break;
             case 'v':
@@ -87,91 +96,176 @@ public class LasersPTUI
             case 'q':
                 running = false;
                 break;
+            default:
+
         }
     }
 
     public void add(int r, int c)
     {
-        if(b[r][c] == "." || b[r][c] == "*")
+        if(r > rsize || r < 0 || c > csize || c < 0)
+        {
+            System.out.println("Error adding laser at: (" + r + ", " + c + ")");
+        }
+        else if(!(b[r][c].matches("[0-9]")) && !(b[r][c].equals("X")))
         {
             b[r][c] = "L";
             addLaserBeam(r, c);
+            System.out.println("Laser added at: (" + r + ", " + c + ")");
+            System.out.println(toString());
         }
         else
         {
-            //Throw some error
+            System.out.println("Error adding laser at: (" + r + ", " + c + ")");
         }
-    }
-
-    public void help()
-    {
-        System.out.println("    a|add r c: Add laser to (r,c)\n" +
-                "    d|display: Display safe\n" +
-                "    h|help: Print this help message\n" +
-                "    q|quit: Exit program\n" +
-                "    r|remove r c: Remove laser from (r,c)\n" +
-                "    v|verify: Verify safe correctness");
     }
 
     public void remove(int r, int c)
     {
-        if(b[r][c] == "L" || b[r][c] == "*")
+        if(r > rsize || r < 0 || c > csize || c < 0)
+        {
+            System.out.println("Error removing laser at: (" + r + ", " + c + ")");
+        }
+        else if(b[r][c].equals("L"))
         {
             b[r][c] = ".";
-            if(r > 0)
-            {
-                for(int row = r; r > -1; r--)
-                {
-                    if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("*"))
-                    {
-                        b[row][c] = ".";
-                    }
-                }
-            }
-            if(r < rsize)
-            {
-                for(int row = r; r < rsize; r++)
-                {
-                    if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("*"))
-                    {
-                        b[row][c] = ".";
-                    }
-                }
-            }
-            if(c > 0)
-            {
-                for(int col = c; c > -1; c--)
-                {
-                    if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("*"))
-                    {
-                        b[r][col] = ".";
-                    }
-                }
-            }
-            if(r < csize)
-            {
-                for(int col = c; c < csize; c++)
-                {
-                    if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("*"))
-                    {
-                        b[r][col] = ".";
-                    }
-                }
-            }
+            removeLaserBeam(r, c);
             for (int row=0; row < b.length; row++)
             {
                 for (int col = 0; col < b[row].length; col++)
                 {
-                    if(b[row][col] == " L")
+                    if(b[row][col].equals("L"))
                     {
                         addLaserBeam(row, col);
                     }
                 }
             }
+            System.out.println("Laser removed at: (" + r + ", " + c + ")");
+            System.out.println(toString());
         }
         else
         {
-            //Throw some error poop
+            System.out.println("Error removing laser at: (" + r + ", " + c + ")");
+        }
+    }
+
+    public void removeLaserBeam(int r, int c)
+    {
+        if(r > 0)
+        {
+            for(int row = r - 1; row >= 0; row--)
+            {
+                if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("L"))
+                {
+                    b[row][c] = ".";
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        if(r < rsize-1)
+        {
+            for(int row = r + 1; row < rsize; row++)
+            {
+                if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("L"))
+                {
+                    b[row][c] = ".";
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        if(c > 0)
+        {
+            for(int col = c - 1; col >= 0; col--)
+            {
+                if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("L"))
+                {
+                    b[r][col] = ".";
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        if(c < csize-1)
+        {
+            for(int col = c + 1; col < csize; col++)
+            {
+                if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("L"))
+                {
+                    b[r][col] = ".";
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    public void addLaserBeam(int r, int c)
+    {
+        if(r > 0)
+        {
+            for(int row = r - 1; row >= 0; row--)
+            {
+                if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("L"))
+                {
+                    b[row][c] = "*";
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        if(r < rsize-1)
+        {
+            for(int row = r + 1; row < rsize; row++)
+            {
+                if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("L"))
+                {
+                    b[row][c] = "*";
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        if(c > 0)
+        {
+            for(int col = c - 1; col >= 0; col--)
+            {
+                if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("L"))
+                {
+                    b[r][col] = "*";
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        if(c < csize-1)
+        {
+            for(int col = c + 1; col < csize; col++)
+            {
+                if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("L"))
+                {
+                    b[r][col] = "*";
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
     }
 
@@ -185,50 +279,6 @@ public class LasersPTUI
             }
         }
         System.out.println("Safe is fully verified!");
-    }
-
-    public void addLaserBeam(int r, int c)
-    {
-        if(r > 0)
-        {
-            for(int row = r; r > -1; r--)
-            {
-                if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("*"))
-                {
-                    b[row][c] = "*";
-                }
-            }
-        }
-        if(r < rsize)
-        {
-            for(int row = r; r < rsize; r++)
-            {
-                if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("*"))
-                {
-                    b[row][c] = "*";
-                }
-            }
-        }
-        if(c > 0)
-        {
-            for(int col = c; c > -1; c--)
-            {
-                if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("*"))
-                {
-                    b[r][col] = "*";
-                }
-            }
-        }
-        if(r < csize)
-        {
-            for(int col = c; c < csize; c++)
-            {
-                if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("*"))
-                {
-                    b[r][col] = "*";
-                }
-            }
-        }
     }
 
     @Override
@@ -276,5 +326,15 @@ public class LasersPTUI
             s += "\n";
         }
         return s;
+    }
+
+    public void help()
+    {
+        System.out.println("    a|add r c: Add laser to (r,c)\n" +
+                "    d|display: Display safe\n" +
+                "    h|help: Print this help message\n" +
+                "    q|quit: Exit program\n" +
+                "    r|remove r c: Remove laser from (r,c)\n" +
+                "    v|verify: Verify safe correctness");
     }
 }
