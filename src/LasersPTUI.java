@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -301,6 +303,39 @@ public class LasersPTUI
 
     public boolean laserVer(int r, int c)
     {
+        String [] pillars = new String[] {"1","2","3","4","x"};
+        for(int i=r;i<rsize;i++){
+            if(this.b[i][c].equals("L")&&i!=r){
+                return false;
+            }
+            else if(Arrays.asList(pillars).contains(this.b[i][c])){
+                i=rsize;
+            }
+        }
+        for(int i=r;i>=0;i--){
+            if(this.b[i][c].equals("L")&&i!=r){
+                return false;
+            }
+            else if(Arrays.asList(pillars).contains(this.b[i][c])){
+                i=-1;
+            }
+        }
+        for(int i=c;i<csize;i++){
+            if(this.b[r][i].equals("L")&&i!=c){
+                return false;
+            }
+            else if(Arrays.asList(pillars).contains(this.b[i][c])){
+                i=csize;
+            }
+        }
+        for(int i=c;i>=0;i--){
+            if(this.b[r][i].equals("L")&&i!=c){
+                return false;
+            }
+            else if(Arrays.asList(pillars).contains(this.b[i][c])){
+                i=-1;
+            }
+        }
         return true;
         //Follow in every direction. If you hit a laser before hitting the end(pillar or end) return false
     }
