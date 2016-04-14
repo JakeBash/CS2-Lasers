@@ -35,7 +35,7 @@ public class LasersPTUI
             if(command.equals(""))
             {
                 command = " ";
-            }
+            }g
             ptui.commandPicker(command);
         }
     }
