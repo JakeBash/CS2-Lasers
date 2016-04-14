@@ -302,7 +302,7 @@ public class LasersPTUI
     public boolean laserVer(int r, int c)
     {
         return true;
-        //I need to do this
+        //Follow in every direction. If you hit a laser before hitting the end(pillar or end) return false
     }
 
     public boolean pillarVer(int r, int c)
