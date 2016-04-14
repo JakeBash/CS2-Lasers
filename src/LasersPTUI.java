@@ -171,6 +171,7 @@ public class LasersPTUI
                 if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("L"))
                 {
                     b[row][c] = ".";
+                    System.out.println("DICKS");
                 }
                 else
                 {
@@ -322,7 +323,10 @@ public class LasersPTUI
                     s+= " ";
                 }
             }
-            s += "\n";
+            if(i < rsize-1)
+            {
+                s += "\n";
+            }
         }
         return s;
     }
