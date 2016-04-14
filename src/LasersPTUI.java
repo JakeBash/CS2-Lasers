@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
- * Created by JakeBashaw on 4/10/2016.
+ * Created by Jake Bashaw on 4/10/2016.
  */
 public class LasersPTUI
 {
@@ -52,32 +52,183 @@ public class LasersPTUI
 
     public void commandPicker(String command)
     {
-        
+        String[] pc = command.split(" ");
+        switch (pc[0].toLowerCase().charAt(0))
+        {
+            case 'h':
+                help();
+                break;
+            case 'a':
+                if(pc.length == 3)
+                {
+                    add(Integer.parseInt(pc[1]), Integer.parseInt(pc[2]));
+                }
+                else
+                {
+                    //Throw some error
+                }
+                break;
+            case 'd':
+                toString();
+                break;
+            case 'r':
+                if(pc.length == 3)
+                {
+                    remove(Integer.parseInt(pc[1]), Integer.parseInt(pc[2]));
+                }
+                else
+                {
+                    //Throw some error
+                }
+                break;
+            case 'v':
+                verify();
+                break;
+            case 'q':
+                running = false;
+                break;
+        }
     }
 
-    public void add(String args)
+    public void add(int r, int c)
     {
-
+        if(b[r][c] == "." || b[r][c] == "*")
+        {
+            b[r][c] = "L";
+            addLaserBeam(r, c);
+        }
+        else
+        {
+            //Throw some error
+        }
     }
 
-    public void display(String args)
+    public void help()
     {
-
+        System.out.println("    a|add r c: Add laser to (r,c)\n" +
+                "    d|display: Display safe\n" +
+                "    h|help: Print this help message\n" +
+                "    q|quit: Exit program\n" +
+                "    r|remove r c: Remove laser from (r,c)\n" +
+                "    v|verify: Verify safe correctness");
     }
 
-    public void help(String args)
+    public void remove(int r, int c)
     {
-
+        if(b[r][c] == "L" || b[r][c] == "*")
+        {
+            b[r][c] = ".";
+            if(r > 0)
+            {
+                for(int row = r; r > -1; r--)
+                {
+                    if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("*"))
+                    {
+                        b[row][c] = ".";
+                    }
+                }
+            }
+            if(r < rsize)
+            {
+                for(int row = r; r < rsize; r++)
+                {
+                    if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("*"))
+                    {
+                        b[row][c] = ".";
+                    }
+                }
+            }
+            if(c > 0)
+            {
+                for(int col = c; c > -1; c--)
+                {
+                    if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("*"))
+                    {
+                        b[r][col] = ".";
+                    }
+                }
+            }
+            if(r < csize)
+            {
+                for(int col = c; c < csize; c++)
+                {
+                    if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("*"))
+                    {
+                        b[r][col] = ".";
+                    }
+                }
+            }
+            for (int row=0; row < b.length; row++)
+            {
+                for (int col = 0; col < b[row].length; col++)
+                {
+                    if(b[row][col] == " L")
+                    {
+                        addLaserBeam(row, col);
+                    }
+                }
+            }
+        }
+        else
+        {
+            //Throw some error
+        }
     }
 
-    public void remove(String args)
+    public void verify()
     {
+        for (int row = 0; row < b.length; row++)
+        {
+            for (int col = 0; col < b[row].length; col++)
+            {
 
+            }
+        }
+        System.out.println("Safe is fully verified!");
     }
 
-    public void verify(String args)
+    public void addLaserBeam(int r, int c)
     {
-
+        if(r > 0)
+        {
+            for(int row = r; r > -1; r--)
+            {
+                if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("*"))
+                {
+                    b[row][c] = "*";
+                }
+            }
+        }
+        if(r < rsize)
+        {
+            for(int row = r; r < rsize; r++)
+            {
+                if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("*"))
+                {
+                    b[row][c] = "*";
+                }
+            }
+        }
+        if(c > 0)
+        {
+            for(int col = c; c > -1; c--)
+            {
+                if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("*"))
+                {
+                    b[r][col] = "*";
+                }
+            }
+        }
+        if(r < csize)
+        {
+            for(int col = c; c < csize; c++)
+            {
+                if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("*"))
+                {
+                    b[r][col] = "*";
+                }
+            }
+        }
     }
 
     @Override
