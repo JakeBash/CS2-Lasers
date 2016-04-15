@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 /**
  * Created by Jake Bashaw on 4/10/2016.
+ * Oscar Onyeke
  */
 public class LasersPTUI
 {
@@ -112,7 +113,11 @@ public class LasersPTUI
     }
 
     public void add(int r, int c)
-    {
+    {/*
+    status of the add command is displayed. If the laser was successfully placed, the standard output message,
+    followed by a new line, if the laser could not be placed the prints an error messages. After the status of the
+    add command is displayed, the safe is redisplayed to standard output.
+     */
         if(r >= rsize || r < 0 || c >= csize || c < 0)
         {
             System.out.println("Error adding laser at: (" + r + ", " + c + ")");
@@ -133,7 +138,10 @@ public class LasersPTUI
     }
 
     public void remove(int r, int c)
-    {
+    {   /*
+            removes the laser from the safe, If the laser could not be removed prints an error message
+            After the status of the remove command is displayed
+        */
         if(r >= rsize || r < 0 || c >= csize || c < 0)
         {
             System.out.println("Error removing laser at: (" + r + ", " + c + ")");
@@ -165,6 +173,9 @@ public class LasersPTUI
 
     public void removeLaserBeam(int r, int c)
     {
+        /*
+        removes the laser beams from a specific starting point in four different directions
+         */
         if(r > 0)
         {
             for(int row = r - 1; row >= 0; row--)
@@ -224,7 +235,9 @@ public class LasersPTUI
     }
 
     public void addLaserBeam(int r, int c)
-    {
+    { /*
+       Adds a laser beams from a specific spot in the four cardinal directions
+      */
         if(r > 0)
         {
             for(int row = r - 1; row >= 0; row--)
@@ -285,6 +298,9 @@ public class LasersPTUI
 
     public void verify()
     {
+        /*
+        displays a status message that indicates whether the safe is valid or not
+         */
         String point;
         for (int row = 0; row < b.length; row++)
         {
@@ -323,6 +339,9 @@ public class LasersPTUI
 
     public boolean laserVer(int r, int c)
     {
+        /*
+        sees if a laser came in contact with another laser
+         */
         String [] pillars = new String[] {"1","2","3","4","X"};
         for(int i=r;i<rsize;i++){
             if(this.b[i][c].equals("L")&&i!=r){
@@ -360,12 +379,14 @@ public class LasersPTUI
     }
 
     public boolean pillarVer(int r, int c)
-    {
+    {/*
+     method that checks a pillar for if they have the specified number of lasers next to them
+     */
         int count = 0;
         if(r > 0)
         {
             if(b[r-1][c].equals("L"))
-            {
+            {//checks above the spot for a laser
                 count++;
             }
         }
@@ -373,25 +394,26 @@ public class LasersPTUI
         {
             if(b[r+1][c].equals("L"))
             {
+                //checks below for a laser
                 count++;
             }
         }
         if(c > 0)
         {
             if(b[r][c-1].equals("L"))
-            {
+            {//checks to the left for a laser
                 count++;
             }
         }
         if(c < csize-1)
         {
             if(b[r][c+1].equals("L"))
-            {
+            {//looks to the right for a laser
                 count++;
             }
         }
         if(count == Integer.parseInt(b[r][c]))
-        {
+        {//checks if the number of laser equals the number on the pillar
             return true;
         }
         return false;
@@ -399,7 +421,9 @@ public class LasersPTUI
 
     @Override
     public String toString()
-    {
+    {/*
+     just redisplays the safe to standard output
+     */
         String s = "  ";
         for (int i = 0; i < csize; i++)
         {
@@ -448,7 +472,9 @@ public class LasersPTUI
     }
 
     public void help()
-    {
+    {/*
+         displays the help message to standard output, with no status message
+     */
         System.out.println("    a|add r c: Add laser to (r,c)\n" +
                 "    d|display: Display safe\n" +
                 "    h|help: Print this help message\n" +
