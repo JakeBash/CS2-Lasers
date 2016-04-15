@@ -343,7 +343,6 @@ public class LasersPTUI
             }
         }
         return true;
-        //Follow in every direction. If you hit a laser before hitting the end(pillar or end) return false
     }
 
     public boolean pillarVer(int r, int c)
