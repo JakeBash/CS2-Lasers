@@ -25,6 +25,7 @@ public class LasersPTUI
             while(sc.hasNextLine())
             {
                 String command = sc.nextLine();
+                System.out.println("> " + command);
                 ptui.commandPicker(command);
             }
             sc.close();
@@ -309,6 +310,7 @@ public class LasersPTUI
             }
         }
         System.out.println("Safe is fully verified!");
+        System.out.println(toString());
     }
 
     public boolean laserVer(int r, int c)
@@ -347,7 +349,6 @@ public class LasersPTUI
             }
         }
         return true;
-        //Follow in every direction. If you hit a laser before hitting the end(pillar or end) return false
     }
 
     public boolean pillarVer(int r, int c)
