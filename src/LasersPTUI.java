@@ -281,12 +281,16 @@ public class LasersPTUI
                 if(point.equals("."))
                 {
                     System.out.println("Error verifying at: (" + row + ", " + col + ")");
+                    toString();
+                    return;
                 }
                 else if(point.equals("L"))
                 {
                     if(!laserVer(row,col))
                     {
                         System.out.println("Error verifying at: (" + row + ", " + col + ")");
+                        toString();
+                        return;
                     }
                 }
                 if(point.matches("[0-9]"))
@@ -294,6 +298,8 @@ public class LasersPTUI
                     if(!pillarVer(row, col))
                     {
                         System.out.println("Error verifying at: (" + row + ", " + col + ")");
+                        toString();
+                        return;
                     }
                 }
             }
@@ -303,7 +309,7 @@ public class LasersPTUI
 
     public boolean laserVer(int r, int c)
     {
-        String [] pillars = new String[] {"1","2","3","4","x"};
+        String [] pillars = new String[] {"1","2","3","4","X"};
         for(int i=r;i<rsize;i++){
             if(this.b[i][c].equals("L")&&i!=r){
                 return false;
@@ -349,20 +355,12 @@ public class LasersPTUI
             {
                 count++;
             }
-            else
-            {
-                return false;
-            }
         }
         if(r < rsize-1)
         {
             if(b[r+1][c].equals("L"))
             {
                 count++;
-            }
-            else
-            {
-                return false;
             }
         }
         if(c > 0)
@@ -371,20 +369,12 @@ public class LasersPTUI
             {
                 count++;
             }
-            else
-            {
-                return false;
-            }
         }
         if(c < csize-1)
         {
             if(b[r][c+1].equals("L"))
             {
                 count++;
-            }
-            else
-            {
-                return false;
             }
         }
         if(count == Integer.parseInt(b[r][c]))
