@@ -17,6 +17,11 @@ public class LasersPTUI
 
     public static void main(String args[]) throws FileNotFoundException
     {
+        if(args.length == 0)
+        {
+            System.out.println("Usage: java LasersPTUI safe-file [input]");
+            System.exit(0);
+        }
         LasersPTUI ptui = new LasersPTUI(args[0]);
         if(args.length == 2)
         {
@@ -98,7 +103,10 @@ public class LasersPTUI
             case 'q':
                 running = false;
                 break;
+            case ' ':
+                break;
             default:
+                System.out.println("Unrecognized command: " + command);
                 break;
         }
     }
