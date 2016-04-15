@@ -17,13 +17,13 @@ public class LasersPTUI
 
     public static void main(String args[]) throws FileNotFoundException
     {
-        LasersPTUI ptui = new LasersPTUI(args[0]);
         if(args.length == 0)
         {
             System.out.println("Usage: java LasersPTUI safe-file [input]");
-            running = false;
+            System.exit(0);
         }
-        else if(args.length == 2)
+        LasersPTUI ptui = new LasersPTUI(args[0]);
+        if(args.length == 2)
         {
             String filename = args[1];
             Scanner sc = new Scanner(new File(filename));
