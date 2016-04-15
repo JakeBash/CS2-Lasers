@@ -99,7 +99,7 @@ public class LasersPTUI
                 running = false;
                 break;
             default:
-
+                break;
         }
     }
 
