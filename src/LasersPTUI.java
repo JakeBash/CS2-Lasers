@@ -1,22 +1,30 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * Created by Jake Bashaw on 4/10/2016.
+ * Part 1 Of the CS2 Lasers Project
+ * Author: Jake Bashaw
+ * Author: Oscar Onyeke
+ * Description: This program allows the user to map out a potential safe
+ * configuration, using standard input or aa supplied file to process commands.
+ * Error checking is built in to prevent from illegal placing/removing of arrows.
  */
 public class LasersPTUI
 {
     // PRIVATE VARIABLES
-    private String[][] b;
-    private int rsize;
-    private int csize;
-    private static boolean running = true;
+    private String[][] b; // The board that the lasers are placed on
+    private int rsize; // The amount of rows in the board
+    private int csize; // The amount of columns in the board
+    private static boolean running = true; // Variable to track whether program is running or not.
 
     public static void main(String args[]) throws FileNotFoundException
     {
+        /*
+        Creates a new board and either runs commands from a given file or
+        prompts the user for input to perform commands.
+         */
         if(args.length == 0)
         {
             System.out.println("Usage: java LasersPTUI safe-file [input]");
@@ -50,6 +58,9 @@ public class LasersPTUI
 
     public LasersPTUI(String filename) throws FileNotFoundException
     {
+        /*
+        Creates a board using a given file. Also prints the initial board.
+         */
         Scanner in = new Scanner(new File(filename));
         rsize = in.nextInt();
         csize = in.nextInt();
@@ -68,6 +79,10 @@ public class LasersPTUI
 
     public void commandPicker(String command)
     {
+        /*
+        Given a typed in command, the associated function is called, error is
+        thrown if command doesn't exist.
+         */
         String[] pc = command.split(" ");
         switch (command.toLowerCase().charAt(0))
         {
@@ -324,35 +339,47 @@ public class LasersPTUI
     public boolean laserVer(int r, int c)
     {
         String [] pillars = new String[] {"1","2","3","4","X"};
-        for(int i=r;i<rsize;i++){
-            if(this.b[i][c].equals("L")&&i!=r){
+        for(int i=r;i<rsize;i++)
+        {
+            if(this.b[i][c].equals("L")&&i!=r)
+            {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c])){
+            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            {
                 i=rsize;
             }
         }
-        for(int i=r;i>=0;i--){
-            if(this.b[i][c].equals("L")&&i!=r){
+        for(int i=r;i>=0;i--)
+        {
+            if(this.b[i][c].equals("L")&&i!=r)
+            {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c])){
+            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            {
                 i=-1;
             }
         }
-        for(int i=c;i<csize;i++){
-            if(this.b[r][i].equals("L")&&i!=c){
+        for(int i=c;i<csize;i++)
+        {
+            if(this.b[r][i].equals("L")&&i!=c)
+            {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c])){
+            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            {
                 i=csize;
             }
         }
-        for(int i=c;i>=0;i--){
-            if(this.b[r][i].equals("L")&&i!=c){
+        for(int i=c;i>=0;i--)
+        {
+            if(this.b[r][i].equals("L")&&i!=c)
+            {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c])){
+            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            {
                 i=-1;
             }
         }
