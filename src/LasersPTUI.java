@@ -21,7 +21,7 @@ public class LasersPTUI
         if(args.length == 0)
         {
             System.out.println("Usage: java LasersPTUI safe-file [input]");
-            System.exit(0);
+            running = false;
         }
         else if(args.length == 2)
         {
