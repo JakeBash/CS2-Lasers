@@ -98,8 +98,11 @@ public class LasersPTUI
             case 'q':
                 running = false;
                 break;
+            case '\n':
+                break;
             default:
-
+                System.out.println("Unrecognized command: " + command);
+                break;
         }
     }
 
