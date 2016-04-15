@@ -25,6 +25,7 @@ public class LasersPTUI
             while(sc.hasNextLine())
             {
                 String command = sc.nextLine();
+                System.out.println("> " + command);
                 ptui.commandPicker(command);
             }
             sc.close();
@@ -98,7 +99,6 @@ public class LasersPTUI
                 running = false;
                 break;
             default:
-                System.out.println("Unrecognized command: " + command);
 
         }
     }
