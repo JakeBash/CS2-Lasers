@@ -107,6 +107,7 @@ public class LasersPTUI
         if(r >= rsize || r < 0 || c >= csize || c < 0)
         {
             System.out.println("Error adding laser at: (" + r + ", " + c + ")");
+            System.out.println(toString());
         }
         else if(!(b[r][c].matches("[0-9]")) && !(b[r][c].equals("X")))
         {
@@ -118,6 +119,7 @@ public class LasersPTUI
         else
         {
             System.out.println("Error adding laser at: (" + r + ", " + c + ")");
+            System.out.println(toString());
         }
     }
 
@@ -126,6 +128,7 @@ public class LasersPTUI
         if(r >= rsize || r < 0 || c >= csize || c < 0)
         {
             System.out.println("Error removing laser at: (" + r + ", " + c + ")");
+            System.out.println(toString());
         }
         else if(b[r][c].equals("L"))
         {
@@ -147,6 +150,7 @@ public class LasersPTUI
         else
         {
             System.out.println("Error removing laser at: (" + r + ", " + c + ")");
+            System.out.println(toString());
         }
     }
 
@@ -281,7 +285,7 @@ public class LasersPTUI
                 if(point.equals("."))
                 {
                     System.out.println("Error verifying at: (" + row + ", " + col + ")");
-                    toString();
+                    System.out.println(toString());
                     return;
                 }
                 else if(point.equals("L"))
@@ -289,7 +293,7 @@ public class LasersPTUI
                     if(!laserVer(row,col))
                     {
                         System.out.println("Error verifying at: (" + row + ", " + col + ")");
-                        toString();
+                        System.out.println(toString());
                         return;
                     }
                 }
@@ -298,7 +302,7 @@ public class LasersPTUI
                     if(!pillarVer(row, col))
                     {
                         System.out.println("Error verifying at: (" + row + ", " + col + ")");
-                        toString();
+                        System.out.println(toString());
                         return;
                     }
                 }
