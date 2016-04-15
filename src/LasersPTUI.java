@@ -98,6 +98,7 @@ public class LasersPTUI
                 running = false;
                 break;
             default:
+                System.out.println("Unrecognized command: " + command);
 
         }
     }
@@ -285,7 +286,7 @@ public class LasersPTUI
                 if(point.equals("."))
                 {
                     System.out.println("Error verifying at: (" + row + ", " + col + ")");
-                    toString();
+                    System.out.println(toString());
                     return;
                 }
                 else if(point.equals("L"))
@@ -293,7 +294,7 @@ public class LasersPTUI
                     if(!laserVer(row,col))
                     {
                         System.out.println("Error verifying at: (" + row + ", " + col + ")");
-                        toString();
+                        System.out.println(toString());
                         return;
                     }
                 }
@@ -302,13 +303,14 @@ public class LasersPTUI
                     if(!pillarVer(row, col))
                     {
                         System.out.println("Error verifying at: (" + row + ", " + col + ")");
-                        toString();
+                        System.out.println(toString());
                         return;
                     }
                 }
             }
         }
         System.out.println("Safe is fully verified!");
+        System.out.println(toString());
     }
 
     public boolean laserVer(int r, int c)
