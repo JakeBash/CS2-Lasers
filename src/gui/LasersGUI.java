@@ -118,42 +118,6 @@ public class LasersGUI extends Application implements Observer
         mainPane.setBottom(controls());
     }
 
-    /**
-     * Starts the GUI so the user can alter it
-     *
-     * @param primaryStage the stage to add UI components into
-     */
-    private GridPane makegid(){
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(1);
-        gridPane.setVgap(1);
-        gridPane.setPadding(new Insets(0,50,0,50));
-        for(int l=0;l<model.getCSize();l++){
-            ColumnConstraints c = new ColumnConstraints();
-            gridPane.getColumnConstraints().add(c);
-        }
-        for (int i=0;i<model.getRSize();i++){
-            RowConstraints r = new RowConstraints();
-            gridPane.getRowConstraints().addAll(r);
-        }
-        for(int row = 0; row<model.getRSize(); row++){
-            for(int colum=0;colum<model.getRSize();colum++){
-                String s=model.getBoard()[row][colum];
-                Button b = new Button();
-                if (s.matches("0-9")){
-                    setButtonBackground(b,"pillar"+s+".png");
-                }
-                else if(s.equals("X")){
-                    setButtonBackground(b,"pillarX"+".png");
-                }
-                else {
-                    setButtonBackground(b,"white"+".png");
-                }
-                gridPane.add(b,row,colum);
-            }}
-        return gridPane;
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception
     {
