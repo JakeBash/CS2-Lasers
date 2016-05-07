@@ -46,6 +46,50 @@ public class LasersPTUI implements Observer
     @Override
     public void update(Observable o, Object arg)
     {
-        model.toString();
+        String s = "  ";
+        for (int i = 0; i < model.getCSize(); i++)
+        {
+            if ( i >= 10)
+            {
+                s += i%10;
+            }
+            else
+            {
+                s += i;
+            }
+            s += " ";
+        }
+        s += "\n";
+        s += "  ";
+        for (int i = 0; i < (2*model.getCSize()) - 1; i++)
+        {
+            s += "-";
+        }
+        s += "\n";
+        for (int i = 0; i < model.getRSize(); i++)
+        {
+            if ( i >= 10)
+            {
+                s += i%10;
+            }
+            else
+            {
+                s += i;
+            }
+            s += "|";
+            for(int j = 0; j < model.getCSize(); j++)
+            {
+                s += model.getBoard()[i][j];
+                if( j < model.getCSize()-1)
+                {
+                    s+= " ";
+                }
+            }
+            if(i < model.getRSize()-1)
+            {
+                s += "\n";
+            }
+        }
+        System.out.println(s);
     }
 }

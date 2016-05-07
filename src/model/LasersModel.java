@@ -18,6 +18,7 @@ public class LasersModel extends Observable
     private String[][] b; // The board that the lasers are placed on
     private int rsize; // The amount of rows in the board
     private int csize; // The amount of columns in the board
+    private String curMessage;
 
     /**
      Creates a board using a given file. Also prints the initial board.
@@ -38,7 +39,7 @@ public class LasersModel extends Observable
             }
         }
         in.close();
-        System.out.println(toString());
+        announceChange();
     }
 
     /**
@@ -53,17 +54,17 @@ public class LasersModel extends Observable
     {
         if(r >= rsize || r < 0 || c >= csize || c < 0)
         {
-            System.out.println("Error adding laser at: (" + r + ", " + c + ")");
+            curMessage = "Error adding laser at: (" + r + ", " + c + ")";
         }
         else if(!(b[r][c].matches("[0-9]")) && !(b[r][c].equals("X")))
         {
             b[r][c] = "L";
             addLaserBeam(r, c);
-            System.out.println("Laser added at: (" + r + ", " + c + ")");
+            curMessage = "Laser added at: (" + r + ", " + c + ")";
         }
         else
         {
-            System.out.println("Error adding laser at: (" + r + ", " + c + ")");
+            curMessage = "Error adding laser at: (" + r + ", " + c + ")";
         }
     }
 
@@ -77,7 +78,7 @@ public class LasersModel extends Observable
     {
         if(r >= rsize || r < 0 || c >= csize || c < 0)
         {
-            System.out.println("Error removing laser at: (" + r + ", " + c + ")");
+            curMessage = "Error removing laser at: (" + r + ", " + c + ")";
         }
         else if(b[r][c].equals("L"))
         {
@@ -93,11 +94,11 @@ public class LasersModel extends Observable
                     }
                 }
             }
-            System.out.println("Laser removed at: (" + r + ", " + c + ")");
+            curMessage = "Laser removed at: (" + r + ", " + c + ")";
         }
         else
         {
-            System.out.println("Error removing laser at: (" + r + ", " + c + ")");
+            curMessage = "Error removing laser at: (" + r + ", " + c + ")";
         }
     }
 
@@ -246,14 +247,14 @@ public class LasersModel extends Observable
                 point = b[row][col];
                 if(point.equals("."))
                 {
-                    System.out.println("Error verifying at: (" + row + ", " + col + ")");
+                    curMessage = "Error verifying at: (" + row + ", " + col + ")";
                     return;
                 }
                 else if(point.equals("L"))
                 {
                     if(!laserVer(row,col))
                     {
-                        System.out.println("Error verifying at: (" + row + ", " + col + ")");
+                        curMessage = "Error verifying at: (" + row + ", " + col + ")";
                         return;
                     }
                 }
@@ -261,13 +262,13 @@ public class LasersModel extends Observable
                 {
                     if(!pillarVer(row, col))
                     {
-                        System.out.println("Error verifying at: (" + row + ", " + col + ")");
+                        curMessage = "Error verifying at: (" + row + ", " + col + ")";
                         return;
                     }
                 }
             }
         }
-        System.out.println("Safe is fully verified!");
+        curMessage = "Safe is fully verified!";
     }
 
     /**
@@ -373,60 +374,6 @@ public class LasersModel extends Observable
     }
 
     /**
-     Displays the safe to standard output.
-     Parameters: None
-     */
-    @Override
-    public String toString()
-    {
-        String s = "  ";
-        for (int i = 0; i < csize; i++)
-        {
-            if ( i >= 10)
-            {
-                s += i%10;
-            }
-            else
-            {
-                s += i;
-            }
-            s += " ";
-        }
-        s += "\n";
-        s += "  ";
-        for (int i = 0; i < (2*csize) - 1; i++)
-        {
-            s += "-";
-        }
-        s += "\n";
-        for (int i = 0; i < rsize; i++)
-        {
-            if ( i >= 10)
-            {
-                s += i%10;
-            }
-            else
-            {
-                s += i;
-            }
-            s += "|";
-            for(int j = 0; j < csize; j++)
-            {
-                s += b[i][j];
-                if( j < csize-1)
-                {
-                    s+= " ";
-                }
-            }
-            if(i < rsize-1)
-            {
-                s += "\n";
-            }
-        }
-        return s;
-    }
-
-    /**
      Displays the help message to standard output, with no status message
      Parameters: None
      */
@@ -440,6 +387,26 @@ public class LasersModel extends Observable
                 "    v|verify: Verify safe correctness");
     }
 
+    public String getCurMessage()
+    {
+        return curMessage;
+    }
+
+    public int getRSize()
+    {
+        return rsize;
+    }
+
+
+    public int getCSize()
+    {
+        return csize;
+    }
+
+    public String[][] getBoard()
+    {
+        return b;
+    }
     /**
      * A utility method that indicates the model has changed and
      * notifies observers
