@@ -8,13 +8,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Scanner;
 
 import model.*;
 
@@ -24,25 +24,38 @@ import model.*;
  * and receives updates from it.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
+ * @author Jake Bashaw, Oscar Onyeke
  */
-public class LasersGUI extends Application implements Observer {
-    /** The UI's connection to the model */
+public class LasersGUI extends Application implements Observer
+{
+    /**
+     * The UI's connection to the model
+     */
     private LasersModel model;
 
-    /** this can be removed - it is used to demonstrates the button toggle */
+    /**
+     * Represents toggling of a button
+     */
     private static boolean status = true;
-    private Label heading;
+
+    /**
+     * Where the GUI object will be placed
+     */
+    BorderPane mainPane = new BorderPane();
 
     @Override
-    public void init() throws Exception {
+    public void init() throws Exception
+    {
         // the init method is run before start.  the file name is extracted
         // here and then the model is created.
-        try {
+        try
+        {
             Parameters params = getParameters();
             String filename = params.getRaw().get(0);
             this.model = new LasersModel(filename);
-        } catch (FileNotFoundException fnfe) {
+        }
+        catch (FileNotFoundException fnfe)
+        {
             System.out.println(fnfe.getMessage());
             System.exit(-1);
         }
@@ -56,7 +69,8 @@ public class LasersGUI extends Application implements Observer {
      * @param button the button control
      * @param bgImgName the name of the image file
      */
-    private void setButtonBackground(Button button, String bgImgName) {
+    private void setButtonBackground(Button button, String bgImgName)
+    {
         BackgroundImage backgroundImage = new BackgroundImage(
                 new Image( getClass().getResource("resources/" + bgImgName).toExternalForm()),
                 BackgroundRepeat.NO_REPEAT,
@@ -71,19 +85,15 @@ public class LasersGUI extends Application implements Observer {
      * This is a private demo method that shows how to create a button
      * and attach a foreground image with a background image that
      * toggles from yellow to red each time it is pressed.
-     *
-     * @param stage the stage to add components into
      */
-    private void buttonDemo(Stage stage) {
-        // this demonstrates how to create a button and attach a foreground and
-        // background image to it.
+    private Button createButton()
+    {
         Button button = new Button();
         Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
         ImageView laserIcon = new ImageView(laserImg);
         button.setGraphic(laserIcon);
         setButtonBackground(button, "yellow.png");
         button.setOnAction(e -> {
-            // toggles background between yellow and red
             if (!status) {
                 setButtonBackground(button, "yellow.png");
             } else {
@@ -91,30 +101,28 @@ public class LasersGUI extends Application implements Observer {
             }
             status = !status;
         });
-
-        Scene scene = new Scene(button);
-        stage.setScene(scene);
+        return button;
     }
 
     /**
-     * The
+     * Initializes a GUI
+     *
      * @param stage the stage to add UI components into
      */
-    private void init(Stage stage) {
-        // TODO
-        BorderPane top = new BorderPane();
-        Parameters params = getParameters();
-        String filename = params.getRaw().get(0);
-        heading.setText(filename+ "Loaded");
-        top.setCenter(heading);
-        BorderPane center = new BorderPane();
-        center.setCenter(makegid());
-
-
-
-        buttonDemo(stage);  // this can be removed/altered
+    private void init(Stage stage)
+    {
+        mainPane.setPrefHeight(600);
+        mainPane.setPrefWidth(400);
+        mainPane.setTop(new Label("NULL"));
+        mainPane.setCenter(grid());
+        mainPane.setBottom(controls());
     }
 
+    /**
+     * Starts the GUI so the user can alter it
+     *
+     * @param primaryStage the stage to add UI components into
+     */
     private GridPane makegid(){
         GridPane gridPane = new GridPane();
         gridPane.setHgap(1);
@@ -147,16 +155,90 @@ public class LasersGUI extends Application implements Observer {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        // TODO
-        init(primaryStage);  // do all your UI initialization here
-
+    public void start(Stage primaryStage) throws Exception
+    {
+        init(primaryStage);
         primaryStage.setTitle("Lasers");
+        primaryStage.setScene(new Scene(mainPane));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
+    /**
+     * Updates the GUI after an action is performed
+     *
+     * @param o Not uses
+     * @param arg Not used
+     */
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg)
+    {
         // TODO
+    }
+
+    /**
+     * Creates the grid that represents the safe
+     */
+    public Pane grid()
+    {
+        GridPane holder = new GridPane();
+        holder.setVgap(10);
+        holder.setHgap(10);
+        holder.setPadding(new Insets(0,50,0,50));
+        for(int r = 0; r < model.getRSize(); r++)
+        {
+            for(int c = 0; c < model.getCSize(); c++)
+            {
+                Button button = createButton();
+                holder.add(button, c, r);
+            }
+        }
+        return holder;
+    }
+
+    /**
+     * Creates the buttons that control the GUI
+     */
+    public Pane controls()
+    {
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(25,25,25,0));
+        hbox.setSpacing(16);
+
+        ArrayList<Button> options = new ArrayList<>();
+
+        Button check = new Button("Check");
+        check.setPrefSize(80, 20);
+        check.setOnMouseClicked(e -> {
+            // TODO
+        });
+        options.add(check);
+
+        Button hint = new Button("Hint");
+        hint.setPrefSize(80, 20);
+        //hint.setOnMouseClicked(e ->  );
+        options.add(hint);
+
+        Button solve = new Button("Solve");
+        solve.setPrefSize(80, 20);
+        //solve.setOnMouseClicked(e -> );
+        options.add(solve);
+
+        Button restart = new Button("Restart");
+        restart.setPrefSize(80, 20);
+        //restart.setOnMouseClicked(e -> );
+        options.add(restart);
+
+        Button load = new Button("Load");
+        load.setPrefSize(80, 20);
+        //load.setOnMouseClicked(e -> );
+        options.add(load);
+
+        for (int i=0; i< options.size(); i++)
+        {
+            HBox.setMargin(options.get(i), new Insets(0, 0, 0, 8));
+            hbox.getChildren().add(options.get(i));
+        }
+        return hbox;
     }
 }

@@ -16,7 +16,11 @@ import java.util.Scanner;
  */
 public class ControllerPTUI
 {
+    /**
+     * Boolean to track whether or not the program is running.
+     */
     private boolean running;
+
     /**
      * The UI's connection to the model
      */
@@ -40,11 +44,6 @@ public class ControllerPTUI
      */
     public void run(String inputFile) throws FileNotFoundException
     {
-        /**
-         Creates a new board and either runs commands from a given file or
-         prompts the user for input to perform commands.
-         Parameters: The program arguments.
-         */
         if (inputFile != null)
         {
             Scanner sc = new Scanner(new File(inputFile));
@@ -69,6 +68,11 @@ public class ControllerPTUI
         }
     }
 
+    /**
+     * Given a user command, calls the associated function.
+     *
+     * @param command The command the user typed in, if present.
+     */
     public void commandPicker(String command)
     {
         String[] pc = command.split(" ");
