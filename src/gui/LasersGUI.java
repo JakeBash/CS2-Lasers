@@ -1,16 +1,20 @@
 package gui;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 
 import model.*;
 
@@ -28,6 +32,7 @@ public class LasersGUI extends Application implements Observer {
 
     /** this can be removed - it is used to demonstrates the button toggle */
     private static boolean status = true;
+    private Label heading;
 
     @Override
     public void init() throws Exception {
@@ -97,7 +102,48 @@ public class LasersGUI extends Application implements Observer {
      */
     private void init(Stage stage) {
         // TODO
+        BorderPane top = new BorderPane();
+        Parameters params = getParameters();
+        String filename = params.getRaw().get(0);
+        heading.setText(filename+ "Loaded");
+        top.setCenter(heading);
+        BorderPane center = new BorderPane();
+        center.setCenter(makegid());
+
+
+
         buttonDemo(stage);  // this can be removed/altered
+    }
+
+    private GridPane makegid(){
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(1);
+        gridPane.setVgap(1);
+        gridPane.setPadding(new Insets(0,50,0,50));
+        for(int l=0;l<model.getCSize();l++){
+            ColumnConstraints c = new ColumnConstraints();
+            gridPane.getColumnConstraints().add(c);
+        }
+        for (int i=0;i<model.getRSize();i++){
+            RowConstraints r = new RowConstraints();
+            gridPane.getRowConstraints().addAll(r);
+        }
+        for(int row = 0; row<model.getRSize(); row++){
+            for(int colum=0;colum<model.getRSize();colum++){
+                String s=model.getBoard()[row][colum];
+                Button b = new Button();
+                if (s.matches("0-9")){
+                    setButtonBackground(b,"pillar"+s+".png");
+                }
+                else if(s.equals("X")){
+                    setButtonBackground(b,"pillarX"+".png");
+                }
+                else {
+                    setButtonBackground(b,"white"+".png");
+                }
+                gridPane.add(b,row,colum);
+            }}
+        return gridPane;
     }
 
     @Override
