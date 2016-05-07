@@ -1,13 +1,18 @@
 package gui;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,11 +28,20 @@ import model.*;
  */
 public class LasersGUI extends Application implements Observer
 {
-    /** The UI's connection to the model */
+    /**
+     * The UI's connection to the model
+     */
     private LasersModel model;
 
-    /** this can be removed - it is used to demonstrates the button toggle */
+    /**
+     * Represents toggling of a button
+     */
     private static boolean status = true;
+
+    /**
+     * Where the GUI object will be placed
+     */
+    BorderPane mainPane = new BorderPane();
 
     @Override
     public void init() throws Exception
@@ -71,20 +85,15 @@ public class LasersGUI extends Application implements Observer
      * This is a private demo method that shows how to create a button
      * and attach a foreground image with a background image that
      * toggles from yellow to red each time it is pressed.
-     *
-     * @param stage the stage to add components into
      */
-    private void buttonDemo(Stage stage)
+    private Button createButton()
     {
-        // this demonstrates how to create a button and attach a foreground and
-        // background image to it.
         Button button = new Button();
         Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
         ImageView laserIcon = new ImageView(laserImg);
         button.setGraphic(laserIcon);
         setButtonBackground(button, "yellow.png");
         button.setOnAction(e -> {
-            // toggles background between yellow and red
             if (!status) {
                 setButtonBackground(button, "yellow.png");
             } else {
@@ -92,9 +101,7 @@ public class LasersGUI extends Application implements Observer
             }
             status = !status;
         });
-
-        Scene scene = new Scene(button);
-        stage.setScene(scene);
+        return button;
     }
 
     /**
@@ -104,7 +111,11 @@ public class LasersGUI extends Application implements Observer
      */
     private void init(Stage stage)
     {
-        // TODO
+        mainPane.setPrefHeight(600);
+        mainPane.setPrefWidth(400);
+        mainPane.setTop(new Label("NULL"));
+        mainPane.setCenter(grid());
+        mainPane.setBottom(controls());
     }
 
     /**
@@ -115,9 +126,10 @@ public class LasersGUI extends Application implements Observer
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        // TODO
         init(primaryStage);
         primaryStage.setTitle("Lasers");
+        primaryStage.setScene(new Scene(mainPane));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
@@ -131,5 +143,71 @@ public class LasersGUI extends Application implements Observer
     public void update(Observable o, Object arg)
     {
         // TODO
+    }
+
+    /**
+     * Creates the grid that represents the safe
+     */
+    public Pane grid()
+    {
+        GridPane holder = new GridPane();
+        holder.setVgap(10);
+        holder.setHgap(10);
+        holder.setPadding(new Insets(0,50,0,50));
+        for(int r = 0; r < model.getRSize(); r++)
+        {
+            for(int c = 0; c < model.getCSize(); c++)
+            {
+                Button button = createButton();
+                holder.add(button, c, r);
+            }
+        }
+        return holder;
+    }
+
+    /**
+     * Creates the buttons that control the GUI
+     */
+    public Pane controls()
+    {
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(25,25,25,0));
+        hbox.setSpacing(16);
+
+        ArrayList<Button> options = new ArrayList<>();
+
+        Button check = new Button("Check");
+        check.setPrefSize(80, 20);
+        check.setOnMouseClicked(e -> {
+            // TODO
+        });
+        options.add(check);
+
+        Button hint = new Button("Hint");
+        hint.setPrefSize(80, 20);
+        //hint.setOnMouseClicked(e ->  );
+        options.add(hint);
+
+        Button solve = new Button("Solve");
+        solve.setPrefSize(80, 20);
+        //solve.setOnMouseClicked(e -> );
+        options.add(solve);
+
+        Button restart = new Button("Restart");
+        restart.setPrefSize(80, 20);
+        //restart.setOnMouseClicked(e -> );
+        options.add(restart);
+
+        Button load = new Button("Load");
+        load.setPrefSize(80, 20);
+        //load.setOnMouseClicked(e -> );
+        options.add(load);
+
+        for (int i=0; i< options.size(); i++)
+        {
+            HBox.setMargin(options.get(i), new Insets(0, 0, 0, 8));
+            hbox.getChildren().add(options.get(i));
+        }
+        return hbox;
     }
 }
