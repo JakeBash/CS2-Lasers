@@ -15,7 +15,9 @@ import model.LasersModel;
  */
 public class LasersPTUI implements Observer
 {
-    /** The UI's connection to the model */
+    /**
+     * The UI's connection to the model
+     */
     private LasersModel model;
 
     /**
@@ -46,6 +48,12 @@ public class LasersPTUI implements Observer
         return this.model;
     }
 
+    /**
+     * Updates the PTUI
+     *
+     * @param o Not used
+     * @param arg Not used
+     */
     @Override
     public void update(Observable o, Object arg)
     {
