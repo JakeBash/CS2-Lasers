@@ -81,7 +81,7 @@ public class ControllerPTUI
                 if (pc.length == 3)
                 {
                     model.add(Integer.parseInt(pc[1]), Integer.parseInt(pc[2]));
-                    //System.out.println(toString());
+                    System.out.println(model.getCurMessage());
                     model.announceChange();
                 }
                 else
@@ -90,13 +90,13 @@ public class ControllerPTUI
                 }
                 break;
             case 'd':
-                System.out.println(toString());
+                model.announceChange();
                 break;
             case 'r':
                 if (pc.length == 3)
                 {
                     model.remove(Integer.parseInt(pc[1]), Integer.parseInt(pc[2]));
-                    //System.out.println(toString());
+                    System.out.println(model.getCurMessage());
                     model.announceChange();
                 }
                 else
@@ -106,7 +106,7 @@ public class ControllerPTUI
                 break;
             case 'v':
                 model.verify();
-                //System.out.println(toString());
+                System.out.println(model.getCurMessage());
                 model.announceChange();
                 break;
             case 'q':
