@@ -3,7 +3,6 @@ package ptui;
 import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.Observer;
-
 import model.LasersModel;
 
 /**
@@ -21,6 +20,7 @@ public class LasersPTUI implements Observer
 
     /**
      * Construct the PTUI.  Create the model and initialize the view.
+     *
      * @param filename the safe file name
      * @throws FileNotFoundException if file not found
      */
@@ -38,6 +38,9 @@ public class LasersPTUI implements Observer
         this.model.addObserver(this);
     }
 
+    /**
+     * Returns the model
+     */
     public LasersModel getModel()
     {
         return this.model;

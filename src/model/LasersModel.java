@@ -14,15 +14,30 @@ import java.util.Scanner;
  */
 public class LasersModel extends Observable
 {
-    // PRIVATE VARIABLES
-    private String[][] b; // The board that the lasers are placed on
-    private int rsize; // The amount of rows in the board
-    private int csize; // The amount of columns in the board
+    /**
+     * The board that the lasers are placed on
+     */
+    private String[][] b;
+
+    /**
+     * The amount of rows in the board
+     */
+    private int rsize;
+
+    /**
+     * The amount of columns in the board
+     */
+    private int csize;
+
+    /**
+     * The current status message
+     */
     private String curMessage;
 
     /**
-     Creates a board using a given file. Also prints the initial board.
-     Parameters: The name of the file to be read.
+     * Creates a board using a given file. Also prints the initial board
+     *
+     * @param filename The name of the file to be read
      */
     public LasersModel(String filename) throws FileNotFoundException
     {
@@ -43,12 +58,46 @@ public class LasersModel extends Observable
     }
 
     /**
-     Status of the add command is displayed. If the laser was successfully
-     placed, the standard output message, followed by a new line, if the
-     laser could not be placed the prints an error messages. After the status
-     of the add command is displayed, the safe is redisplayed to standard
-     output.
-     Parameters: The row and column where the laser is to be added.
+     * Returns the current status message
+     */
+    public String getCurMessage()
+    {
+        return curMessage;
+    }
+
+    /**
+     * Returns the row size of the safe
+     */
+    public int getRSize()
+    {
+        return rsize;
+    }
+
+    /**
+     * Returns the column size of the safe
+     */
+    public int getCSize()
+    {
+        return csize;
+    }
+
+    /**
+     * Returns the 2D safe configuration
+     */
+    public String[][] getBoard()
+    {
+        return b;
+    }
+
+    /**
+     * Status of the add command is displayed. If the laser was successfully
+     * placed, the standard output message, followed by a new line, if the
+     * laser could not be placed the prints an error messages. After the status
+     * of the add command is displayed, the safe is redisplayed to standard
+     * output.
+     *
+     * @param r The row where the laser is to be added
+     * @param c The column where the laser is to be added
      */
     public void add(int r, int c)
     {
@@ -69,10 +118,12 @@ public class LasersModel extends Observable
     }
 
     /**
-     Removes the laser from the safe. If the laser could not be removed, an
-     error message is printed. After the print, the status of the remove
-     command is displayed.
-     Parameters: The row and column where the laser is to be added.
+     * Removes the laser from the safe. If the laser could not be removed, an
+     * error message is printed. After the print, the status of the remove
+     * command is displayed.
+     *
+     * @param r The row where the laser is going to be removed
+     * @param c The column where the laser is going to be removed
      */
     public void remove(int r, int c)
     {
@@ -103,9 +154,11 @@ public class LasersModel extends Observable
     }
 
     /**
-     Removes the laser beams from a specific starting point in the four
-     cardinal directions.
-     Parameters: The row and column where the beam removal begins.
+     * Removes the laser beams from a specific starting point in the four
+     * cardinal directions
+     *
+     * @param r The row where beam removal begins
+     * @param c The column where beam removal begins
      */
     public void removeLaserBeam(int r, int c)
     {
@@ -168,9 +221,11 @@ public class LasersModel extends Observable
     }
 
     /**
-     Adds laser beams from a specific starting point in the four cardinal
-     directions.
-     Parameters: The row and column where the beam adding begins.
+     * Adds laser beams from a specific starting point in the four cardinal
+     * directions
+     *
+     * @param r The row where beam adding begins
+     * @param c The row where column adding begins
      */
     public void addLaserBeam(int r, int c)
     {
@@ -233,9 +288,8 @@ public class LasersModel extends Observable
     }
 
     /**
-     Displays a status message that indicates whether the safe is valid or
-     not.
-     Parameters: None
+     * Displays a status message that indicates whether the safe is valid or
+     * not
      */
     public void verify()
     {
@@ -272,8 +326,10 @@ public class LasersModel extends Observable
     }
 
     /**
-     Sees if a laser came in contact with another laser.
-     Parameters: The row and column where the laser verification begins.
+     * Sees if a laser came in contact with another laser
+     *
+     * @param r The row where laser verification begins
+     * @param c The column where laser verification begins
      */
     public boolean laserVer(int r, int c)
     {
@@ -326,9 +382,11 @@ public class LasersModel extends Observable
     }
 
     /**
-     Checks a pillar too see if has the specified number of lasers surrounding
-     it.
-     Parameters: The row and column where the pillar verification begins.
+     * Checks a pillar too see if has the specified number of lasers surrounding
+     * it
+     *
+     * @param r The row where verification begins
+     * @param c The column where verification begins
      */
     public boolean pillarVer(int r, int c)
     {
@@ -337,7 +395,6 @@ public class LasersModel extends Observable
         {
             if(b[r-1][c].equals("L"))
             {
-                // Checks above the spot for a laser
                 count++;
             }
         }
@@ -345,7 +402,6 @@ public class LasersModel extends Observable
         {
             if(b[r+1][c].equals("L"))
             {
-                // Checks below for a laser
                 count++;
             }
         }
@@ -353,7 +409,6 @@ public class LasersModel extends Observable
         {
             if(b[r][c-1].equals("L"))
             {
-                // Checks to the left for a laser
                 count++;
             }
         }
@@ -361,21 +416,18 @@ public class LasersModel extends Observable
         {
             if(b[r][c+1].equals("L"))
             {
-                // Checks to the right for a laser
                 count++;
             }
         }
         if(count == Integer.parseInt(b[r][c]))
         {
-            // Checks if the number of laser equals the number on the pillar
             return true;
         }
         return false;
     }
 
     /**
-     Displays the help message to standard output, with no status message
-     Parameters: None
+     * Displays the help message to standard output, with no status message
      */
     public void help()
     {
@@ -387,26 +439,6 @@ public class LasersModel extends Observable
                 "    v|verify: Verify safe correctness");
     }
 
-    public String getCurMessage()
-    {
-        return curMessage;
-    }
-
-    public int getRSize()
-    {
-        return rsize;
-    }
-
-
-    public int getCSize()
-    {
-        return csize;
-    }
-
-    public String[][] getBoard()
-    {
-        return b;
-    }
     /**
      * A utility method that indicates the model has changed and
      * notifies observers

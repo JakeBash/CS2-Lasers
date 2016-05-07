@@ -7,7 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
 import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.Observer;
@@ -20,9 +19,10 @@ import model.*;
  * and receives updates from it.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
+ * @author Jake Bashaw, Oscar Onyeke
  */
-public class LasersGUI extends Application implements Observer {
+public class LasersGUI extends Application implements Observer
+{
     /** The UI's connection to the model */
     private LasersModel model;
 
@@ -30,14 +30,18 @@ public class LasersGUI extends Application implements Observer {
     private static boolean status = true;
 
     @Override
-    public void init() throws Exception {
+    public void init() throws Exception
+    {
         // the init method is run before start.  the file name is extracted
         // here and then the model is created.
-        try {
+        try
+        {
             Parameters params = getParameters();
             String filename = params.getRaw().get(0);
             this.model = new LasersModel(filename);
-        } catch (FileNotFoundException fnfe) {
+        }
+        catch (FileNotFoundException fnfe)
+        {
             System.out.println(fnfe.getMessage());
             System.exit(-1);
         }
@@ -51,7 +55,8 @@ public class LasersGUI extends Application implements Observer {
      * @param button the button control
      * @param bgImgName the name of the image file
      */
-    private void setButtonBackground(Button button, String bgImgName) {
+    private void setButtonBackground(Button button, String bgImgName)
+    {
         BackgroundImage backgroundImage = new BackgroundImage(
                 new Image( getClass().getResource("resources/" + bgImgName).toExternalForm()),
                 BackgroundRepeat.NO_REPEAT,
@@ -69,7 +74,8 @@ public class LasersGUI extends Application implements Observer {
      *
      * @param stage the stage to add components into
      */
-    private void buttonDemo(Stage stage) {
+    private void buttonDemo(Stage stage)
+    {
         // this demonstrates how to create a button and attach a foreground and
         // background image to it.
         Button button = new Button();
@@ -92,25 +98,38 @@ public class LasersGUI extends Application implements Observer {
     }
 
     /**
-     * The
+     * Initializes a GUI
+     *
      * @param stage the stage to add UI components into
      */
-    private void init(Stage stage) {
+    private void init(Stage stage)
+    {
         // TODO
-        buttonDemo(stage);  // this can be removed/altered
     }
 
+    /**
+     * Starts the GUI so the user can alter it
+     *
+     * @param primaryStage the stage to add UI components into
+     */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws Exception
+    {
         // TODO
-        init(primaryStage);  // do all your UI initialization here
-
+        init(primaryStage);
         primaryStage.setTitle("Lasers");
         primaryStage.show();
     }
 
+    /**
+     * Updates the GUI after an action is performed
+     *
+     * @param o Not uses
+     * @param arg Not used
+     */
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg)
+    {
         // TODO
     }
 }
