@@ -91,13 +91,14 @@ public class LasersGUI extends Application implements Observer
         Button button = new Button();
         Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
         ImageView laserIcon = new ImageView(laserImg);
-        button.setGraphic(laserIcon);
-        setButtonBackground(button, "yellow.png");
+        setButtonBackground(button, "white.png");
         button.setOnAction(e -> {
             if (!status) {
-                setButtonBackground(button, "yellow.png");
+                button.setGraphic(null);
+                setButtonBackground(button,"white.png");
             } else {
-                setButtonBackground(button, "red.png");
+                button.setGraphic(laserIcon);
+                setButtonBackground(button, "yellow.png");
             }
             status = !status;
         });
@@ -153,8 +154,24 @@ public class LasersGUI extends Application implements Observer
         {
             for(int c = 0; c < model.getCSize(); c++)
             {
-                Button button = createButton();
-                holder.add(button, c, r);
+                String s=model.getBoard()[r][c];
+                if (s.matches("0-9")){
+                    Button b = new Button();
+                    setButtonBackground(b,"pillar"+s+".png");
+                    holder.add(b, c, r);
+                }
+                else if(s.equals("X")){
+                    Button b = new Button();
+                    setButtonBackground(b,"pillarX"+".png");
+                    holder.add(b, c, r);
+
+                }
+                else {
+                    Button b = createButton();
+                    holder.add(b, c, r);
+
+                }
+
             }
         }
         return holder;
