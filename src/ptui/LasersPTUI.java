@@ -28,16 +28,8 @@ public class LasersPTUI implements Observer
      */
     public LasersPTUI(String filename) throws FileNotFoundException
     {
-        try
-        {
-            this.model = new LasersModel(filename);
-        }
-        catch (FileNotFoundException fnfe)
-        {
-            System.out.println(fnfe.getMessage());
-            System.exit(-1);
-        }
-        this.model.addObserver(this);
+        this.model = new LasersModel(filename);
+        model.addObserver(this);
     }
 
     /**

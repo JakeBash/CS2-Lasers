@@ -35,13 +35,38 @@ public class LasersModel extends Observable
     private String curMessage;
 
     /**
+     * The current file being used
+     */
+    private String curFile;
+
+    /**
+     * The row of the node that failed to verify
+     */
+    private int rVer = -1;
+
+    /**
+     * The column of the row that failed to verify
+     */
+    private int cVer = -1;
+
+    /**
      * Creates a board using a given file. Also prints the initial board
      *
      * @param filename The name of the file to be read
      */
-    public LasersModel(String filename) throws FileNotFoundException
+    public LasersModel(String filename)
     {
-        Scanner in = new Scanner(new File(filename));
+        Scanner in = null;
+        try
+        {
+            in = new Scanner(new File(filename));
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        curMessage = filename + " loaded";
+        curFile  = filename;
         rsize = in.nextInt();
         csize = in.nextInt();
         in.nextLine();
@@ -66,6 +91,14 @@ public class LasersModel extends Observable
     }
 
     /**
+     * Returns the current file
+     */
+    public String getCurFile()
+    {
+        return curFile;
+    }
+
+    /**
      * Returns the row size of the safe
      */
     public int getRSize()
@@ -74,11 +107,47 @@ public class LasersModel extends Observable
     }
 
     /**
+     * Sets the row of the bad verification
+     *
+     * @param num The number that is used to set
+     */
+    public void setRVer(int num)
+    {
+        rVer = num;
+    }
+
+    /**
+     * Sets the column of the bad verification
+     *
+     * @param num The number that is used to set
+     */
+    public void setCVer(int num)
+    {
+        cVer = num;
+    }
+
+    /**
      * Returns the column size of the safe
      */
     public int getCSize()
     {
         return csize;
+    }
+
+    /**
+     * Returns the row of the node that failed to verify
+     */
+    public int getRVer()
+    {
+        return rVer;
+    }
+
+    /**
+     * Returns the column of the node that failed to verify
+     */
+    public int getCVer()
+    {
+        return cVer;
     }
 
     /**
@@ -301,6 +370,8 @@ public class LasersModel extends Observable
                 point = b[row][col];
                 if(point.equals("."))
                 {
+                    rVer = row;
+                    cVer = col;
                     curMessage = "Error verifying at: (" + row + ", " + col + ")";
                     return;
                 }
@@ -308,6 +379,8 @@ public class LasersModel extends Observable
                 {
                     if(!laserVer(row,col))
                     {
+                        rVer = row;
+                        cVer = col;
                         curMessage = "Error verifying at: (" + row + ", " + col + ")";
                         return;
                     }
@@ -316,6 +389,8 @@ public class LasersModel extends Observable
                 {
                     if(!pillarVer(row, col))
                     {
+                        rVer = row;
+                        cVer = col;
                         curMessage = "Error verifying at: (" + row + ", " + col + ")";
                         return;
                     }
