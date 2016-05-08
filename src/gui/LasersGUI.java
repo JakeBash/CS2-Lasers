@@ -2,6 +2,7 @@ package gui;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,12 +11,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import javafx.stage.Window;
 import model.*;
 
 /**
@@ -34,11 +40,6 @@ public class LasersGUI extends Application implements Observer
     private LasersModel model;
 
     /**
-     * Represents toggling of a button
-     */
-    private static boolean status = true;
-
-    /**
      * Where the GUI object will be placed
      */
     BorderPane mainPane = new BorderPane();
@@ -48,17 +49,9 @@ public class LasersGUI extends Application implements Observer
     {
         // the init method is run before start.  the file name is extracted
         // here and then the model is created.
-        try
-        {
-            Parameters params = getParameters();
-            String filename = params.getRaw().get(0);
-            this.model = new LasersModel(filename);
-        }
-        catch (FileNotFoundException fnfe)
-        {
-            System.out.println(fnfe.getMessage());
-            System.exit(-1);
-        }
+        Parameters params = getParameters();
+        String filename = params.getRaw().get(0);
+        this.model = new LasersModel(filename);
         this.model.addObserver(this);
     }
 
@@ -82,39 +75,15 @@ public class LasersGUI extends Application implements Observer
     }
 
     /**
-     * This is a private demo method that shows how to create a button
-     * and attach a foreground image with a background image that
-     * toggles from yellow to red each time it is pressed.
-     */
-    private Button createButton()
-    {
-        Button button = new Button();
-        Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
-        ImageView laserIcon = new ImageView(laserImg);
-        setButtonBackground(button, "white.png");
-        button.setOnAction(e -> {
-            if (!status) {
-                button.setGraphic(null);
-                setButtonBackground(button,"white.png");
-            } else {
-                button.setGraphic(laserIcon);
-                setButtonBackground(button, "yellow.png");
-            }
-            status = !status;
-        });
-        return button;
-    }
-
-    /**
      * Initializes a GUI
      *
      * @param stage the stage to add UI components into
      */
     private void init(Stage stage)
     {
-        mainPane.setPrefHeight(600);
-        mainPane.setPrefWidth(400);
-        mainPane.setTop(new Label("NULL"));
+        mainPane.setPrefHeight(300);
+        mainPane.setPrefWidth(600);
+        mainPane.setTop(status());
         mainPane.setCenter(grid());
         mainPane.setBottom(controls());
     }
@@ -138,7 +107,23 @@ public class LasersGUI extends Application implements Observer
     @Override
     public void update(Observable o, Object arg)
     {
-        // TODO
+        mainPane.setTop(status());
+        mainPane.setCenter(grid());
+        mainPane.setBottom(controls());
+    }
+
+    /**
+     * Creates the status label
+     */
+    public Pane status()
+    {
+        GridPane holder = new GridPane();
+        Label status = new Label(model.getCurMessage());
+        status.setAlignment(Pos.CENTER);
+        status.setPadding(new Insets(10,0,10,0));
+        holder.add(status,0,0);
+        holder.setAlignment(Pos.CENTER);
+        return holder;
     }
 
     /**
@@ -149,27 +134,51 @@ public class LasersGUI extends Application implements Observer
         GridPane holder = new GridPane();
         holder.setVgap(10);
         holder.setHgap(10);
-        holder.setPadding(new Insets(0,50,0,50));
+        holder.setPadding(new Insets(30,0,30,0));
+        holder.setAlignment(Pos.CENTER);
         for(int r = 0; r < model.getRSize(); r++)
         {
             for(int c = 0; c < model.getCSize(); c++)
             {
-                String s=model.getBoard()[r][c];
-                if (s.matches("0-9")){
+                String s = model.getBoard()[r][c];
+                if (s.matches("[0-9]"))
+                {
                     Button b = new Button();
-                    setButtonBackground(b,"pillar"+s+".png");
+                    if(model.getRVer() == r && model.getCVer() == c)
+                    {
+                        b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/pillar" + s + ".png"))));
+                        setButtonBackground(b, "red.png");
+                        model.setRVer(-1);
+                        model.setCVer(-1);
+                    }
+                    else
+                    {
+                        b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/pillar" + s + ".png"))));
+                        setButtonBackground(b, "white.png");
+                    }
                     holder.add(b, c, r);
                 }
-                else if(s.equals("X")){
+                else if(s.equals("X"))
+                {
                     Button b = new Button();
-                    setButtonBackground(b,"pillarX"+".png");
+                    b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/pillarX.png"))));
                     holder.add(b, c, r);
 
                 }
-                else {
-                    Button b = createButton();
+                else if(s.equals("."))
+                {
+                    Button b = createButton(r, c, s);
                     holder.add(b, c, r);
-
+                }
+                else if(s.equals("*"))
+                {
+                    Button b = createButton(r, c, s);
+                    holder.add(b, c, r);
+                }
+                else if(s.equals("L"))
+                {
+                    Button b = createButton(r, c, s);
+                    holder.add(b, c, r);
                 }
 
             }
@@ -178,12 +187,66 @@ public class LasersGUI extends Application implements Observer
     }
 
     /**
+     * This creates the clickable buttons in the safe grid.
+     */
+    private Button createButton(int r, int c, String type)
+    {
+        Button button = new Button();
+        if(type.equals("."))
+        {
+            if(model.getRVer() == r && model.getCVer() == c)
+            {
+                button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/red.png"))));
+                model.setRVer(-1);
+                model.setCVer(-1);
+            }
+            else
+            {
+                button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/white.png"))));
+            }
+            button.setOnAction(e -> {
+                model.add(r,c);
+                model.announceChange();
+            });
+        }
+        else if(type.equals("*"))
+        {
+            button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/beam.png"))));
+            setButtonBackground(button, "yellow.png");
+            button.setOnAction(e -> {
+                model.add(r,c);
+                model.announceChange();
+            });
+        }
+        else if(type.equals("L"))
+        {
+            if(model.getRVer() == r && model.getCVer() == c)
+            {
+                button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/laser.png"))));
+                setButtonBackground(button, "red.png");
+                model.setRVer(-1);
+                model.setCVer(-1);
+            }
+            else
+            {
+                button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/laser.png"))));
+                setButtonBackground(button, "yellow.png");
+            }
+            button.setOnAction(e -> {
+                model.remove(r,c);
+                model.announceChange();
+            });
+        }
+        return button;
+    }
+
+    /**
      * Creates the buttons that control the GUI
      */
     public Pane controls()
     {
         HBox hbox = new HBox();
-        hbox.setPadding(new Insets(25,25,25,0));
+        hbox.setPadding(new Insets(0,50,15,50));
         hbox.setSpacing(16);
 
         ArrayList<Button> options = new ArrayList<>();
@@ -191,28 +254,37 @@ public class LasersGUI extends Application implements Observer
         Button check = new Button("Check");
         check.setPrefSize(80, 20);
         check.setOnMouseClicked(e -> {
-            // TODO
+            model.verify();
+            model.announceChange();
         });
         options.add(check);
 
         Button hint = new Button("Hint");
         hint.setPrefSize(80, 20);
-        //hint.setOnMouseClicked(e ->  );
+        hint.setOnMouseClicked(e -> {
+            // TODO
+        });
         options.add(hint);
 
         Button solve = new Button("Solve");
         solve.setPrefSize(80, 20);
-        //solve.setOnMouseClicked(e -> );
+        solve.setOnMouseClicked(e -> {
+            // TODO
+        });
         options.add(solve);
 
         Button restart = new Button("Restart");
         restart.setPrefSize(80, 20);
-        //restart.setOnMouseClicked(e -> );
+        restart.setOnMouseClicked(e -> {
+            model = new LasersModel(model.getCurFile());
+            model.addObserver(this);
+            model.announceChange();
+        });
         options.add(restart);
 
         Button load = new Button("Load");
         load.setPrefSize(80, 20);
-        //load.setOnMouseClicked(e -> );
+        load.setOnMouseClicked(e -> load());
         options.add(load);
 
         for (int i=0; i< options.size(); i++)
@@ -221,5 +293,18 @@ public class LasersGUI extends Application implements Observer
             hbox.getChildren().add(options.get(i));
         }
         return hbox;
+    }
+
+    public void load()
+    {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        File f = fileChooser.showOpenDialog(new Stage());
+        if(f != null)
+        {
+            model = new LasersModel(f.toString());
+            model.addObserver(this);
+            model.announceChange();
+        }
     }
 }
