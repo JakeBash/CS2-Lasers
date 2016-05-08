@@ -92,6 +92,7 @@ public class LasersGUI extends Application implements Observer
         Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
         ImageView laserIcon = new ImageView(laserImg);
         setButtonBackground(button, "white.png");
+        button.setPrefSize(30,30);
         button.setOnAction(e -> {
             if (!status) {
                 button.setGraphic(null);
@@ -124,36 +125,6 @@ public class LasersGUI extends Application implements Observer
      *
      * @param primaryStage the stage to add UI components into
      */
-    private GridPane makegid(){
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(1);
-        gridPane.setVgap(1);
-        gridPane.setPadding(new Insets(0,50,0,50));
-        for(int l=0;l<model.getCSize();l++){
-            ColumnConstraints c = new ColumnConstraints();
-            gridPane.getColumnConstraints().add(c);
-        }
-        for (int i=0;i<model.getRSize();i++){
-            RowConstraints r = new RowConstraints();
-            gridPane.getRowConstraints().addAll(r);
-        }
-        for(int row = 0; row<model.getRSize(); row++){
-            for(int colum=0;colum<model.getRSize();colum++){
-                String s=model.getBoard()[row][colum];
-                Button b = new Button();
-                if (s.matches("0-9")){
-                    setButtonBackground(b,"pillar"+s+".png");
-                }
-                else if(s.equals("X")){
-                    setButtonBackground(b,"pillarX"+".png");
-                }
-                else {
-                    setButtonBackground(b,"white"+".png");
-                }
-                gridPane.add(b,row,colum);
-            }}
-        return gridPane;
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception
@@ -191,19 +162,22 @@ public class LasersGUI extends Application implements Observer
             for(int c = 0; c < model.getCSize(); c++)
             {
                 String s=model.getBoard()[r][c];
-                if (s.matches("0-9")){
+                if (s.matches("[0-9]")){
                     Button b = new Button();
+                    b.setPrefSize(30,30);
                     setButtonBackground(b,"pillar"+s+".png");
                     holder.add(b, c, r);
                 }
                 else if(s.equals("X")){
                     Button b = new Button();
-                    setButtonBackground(b,"pillarX"+".png");
+                    b.setPrefSize(30,30);
+                    setButtonBackground(b,"pillarX.png");
                     holder.add(b, c, r);
 
                 }
                 else {
                     Button b = createButton();
+                    b.setPrefSize(30,30);
                     holder.add(b, c, r);
 
                 }
