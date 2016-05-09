@@ -30,7 +30,8 @@ import model.*;
  * and receives updates from it.
  *
  * @author Sean Strout @ RIT CS
- * @author Jake Bashaw, Oscar Onyeke
+ * @author Jake Bashaw
+ * @author Oscar Onyeke
  */
 public class LasersGUI extends Application implements Observer
 {
@@ -154,22 +155,40 @@ public class LasersGUI extends Application implements Observer
                     Button b = new Button();
                     if(model.getRVer() == r && model.getCVer() == c)
                     {
+                        int row  = r;
+                        int col = c;
                         b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/pillar" + s + ".png"))));
                         setButtonBackground(b, "red.png");
                         model.setRVer(-1);
                         model.setCVer(-1);
+                        b.setOnAction(e -> {
+                            model.add(row, col);
+                            model.announceChange();
+                        });
                     }
                     else
                     {
+                        int row  = r;
+                        int col = c;
                         b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/pillar" + s + ".png"))));
                         setButtonBackground(b, "white.png");
+                        b.setOnAction(e -> {
+                            model.add(row, col);
+                            model.announceChange();
+                        });
                     }
                     holder.add(b, c, r);
                 }
                 else if(s.equals("X"))
                 {
+                    int row  = r;
+                    int col = c;
                     Button b = new Button();
                     b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/pillarX.png"))));
+                    b.setOnAction(e -> {
+                        model.add(row, col);
+                        model.announceChange();
+                    });
                     holder.add(b, c, r);
 
                 }

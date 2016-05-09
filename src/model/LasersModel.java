@@ -10,7 +10,8 @@ import java.util.Scanner;
  * This class handles all of the safe backend commands. Adding, removing, and
  * verifying safe configurations is done in this class.
  * @author Sean Strout @ RIT CS
- * @author Jake Bashaw, Oscar Onyeke
+ * @author Jake Bashaw
+ * @author Oscar Onyeke
  */
 public class LasersModel extends Observable
 {

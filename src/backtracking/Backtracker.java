@@ -1,6 +1,6 @@
 package backtracking;
 
-import java.util.ArrayList;
+ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +15,8 @@ import java.util.Optional;
  *
  * @author Sean Strout @ RIT CS
  * @author James Heliotis @ RIT CS
- * @author YOUR NAME HERE
+ * @author Jake Bashaw
+ * @author Oscar Onyeke
  */
 public class Backtracker {
 

@@ -12,7 +12,8 @@ import java.util.Collection;
  * package and/or incorporate it into another class.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
+ * @author Jake Bashaw
+ * @author Oscar Onyeke
  */
 public class SafeConfig implements Configuration {
 
