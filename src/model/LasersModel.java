@@ -57,15 +57,16 @@ public class LasersModel extends Observable
     public LasersModel(String filename)
     {
         Scanner in = null;
+        File file = new File(filename);
         try
         {
-            in = new Scanner(new File(filename));
+            in = new Scanner(file);
         }
         catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }
-        curMessage = filename + " loaded";
+        curMessage = file.getName()+ " loaded";
         curFile  = filename;
         rsize = in.nextInt();
         csize = in.nextInt();

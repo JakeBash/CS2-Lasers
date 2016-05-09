@@ -29,7 +29,8 @@ public class LasersPTUI implements Observer
     public LasersPTUI(String filename) throws FileNotFoundException
     {
         this.model = new LasersModel(filename);
-        model.addObserver(this);
+        this.model.addObserver(this);
+        this.model.announceChange();
     }
 
     /**
