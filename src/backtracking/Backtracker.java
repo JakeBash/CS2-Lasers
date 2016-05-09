@@ -18,8 +18,8 @@ import java.util.Optional;
  * @author Jake Bashaw
  * @author Oscar Onyeke
  */
-public class Backtracker {
-
+public class Backtracker
+{
     private boolean debug;
 
     /**
@@ -27,9 +27,11 @@ public class Backtracker {
      *
      * @param debug Is debugging output enabled?
      */
-    public Backtracker(boolean debug) {
+    public Backtracker(boolean debug)
+    {
         this.debug = debug;
-        if (this.debug) {
+        if (this.debug)
+        {
             System.out.println("Backtracker debugging enabled...");
         }
     }
@@ -41,8 +43,10 @@ public class Backtracker {
      *               successor, e.g.)
      * @param config The config to display
      */
-    private void debugPrint(String msg, Configuration config) {
-        if (this.debug) {
+    private void debugPrint(String msg, Configuration config)
+    {
+        if (this.debug)
+        {
             System.out.println(msg + ":\n" + config);
         }
     }
@@ -53,20 +57,29 @@ public class Backtracker {
      * @param config A valid configuration
      * @return A solution config, or null if no solution
      */
-    public Optional<Configuration> solve(Configuration config) {
+    public Optional<Configuration> solve(Configuration config)
+    {
         debugPrint("Current config", config);
-        if (config.isGoal()) {
+        if (config.isGoal())
+        {
             debugPrint("\tGoal config", config);
             return Optional.of(config);
-        } else {
-            for (Configuration child : config.getSuccessors()) {
-                if (child.isValid()) {
+        }
+        else
+        {
+            for (Configuration child : config.getSuccessors())
+            {
+                if (child.isValid())
+                {
                     debugPrint("\tValid successor", child);
                     Optional<Configuration> sol = solve(child);
-                    if (sol.isPresent()) {
+                    if (sol.isPresent())
+                    {
                         return sol;
                     }
-                } else {
+                }
+                else
+                {
                     debugPrint("\tInvalid successor", child);
                 }
             }
@@ -82,7 +95,8 @@ public class Backtracker {
      * @return a list of configurations to get to a goal configuration.
      * If there are none, return null.
      */
-    public List<Configuration> solveWithPath(Configuration current) {
+    public List<Configuration> solveWithPath(Configuration current)
+    {
         // TODO
         return new ArrayList<>();  // change this
     }

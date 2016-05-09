@@ -15,26 +15,31 @@ import java.util.Collection;
  * @author Jake Bashaw
  * @author Oscar Onyeke
  */
-public class SafeConfig implements Configuration {
+public class SafeConfig implements Configuration
+{
 
-    public SafeConfig(String filename) {
+    public SafeConfig(String filename)
+    {
         // TODO
     }
 
     @Override
-    public Collection<Configuration> getSuccessors() {
+    public Collection<Configuration> getSuccessors()
+    {
         // TODO
         return null;
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isValid()
+    {
         // TODO
         return false;
     }
 
     @Override
-    public boolean isGoal() {
+    public boolean isGoal()
+    {
         // TODO
         return false;
     }

@@ -9,11 +9,16 @@ import java.util.Optional;
  *
  * @author Sean Strout @ RIT CS
  */
-public class SafeSolver {
-    public static void main(String[] args) throws FileNotFoundException {
-        if (args.length != 2) {
+public class SafeSolver
+{
+    public static void main(String[] args) throws FileNotFoundException
+    {
+        if (args.length != 2)
+        {
             System.out.println("Usage: java SafeSolver safe.in debug");
-        } else {
+        }
+        else
+        {
             // construct the initial configuration from the file
             Configuration init = new SafeConfig(args[0]);
 
@@ -32,10 +37,14 @@ public class SafeSolver {
                     (System.currentTimeMillis() - start)/1000.0 + " seconds.");
 
             // indicate whether there was a solution, or not
-            if (sol.isPresent()) {
+            if (sol.isPresent())
+            {
                 System.out.println("Solution:\n" + sol.get());
-            } else {
+            }
+            else
+            {
                 System.out.println("No solution!");
-            }        }
+            }
+        }
     }
 }
