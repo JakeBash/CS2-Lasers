@@ -1,6 +1,7 @@
 package backtracking;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class Backtracker {
 
     private boolean debug;
-
+    ArrayList<Configuration> configs = new ArrayList<>();
     /**
      * Initialize a new backtracker.
      *
@@ -83,6 +84,15 @@ public class Backtracker {
      */
     public List<Configuration> solveWithPath(Configuration current) {
         // TODO
-        return new ArrayList<>();  // change this
+        configs.addAll(current.getSuccessors());
+        if(configs.size()==1){
+            if (configs.remove(0).isGoal()){
+                return configs;
+            }
+            else{
+                return null;
+            }
+        }
+        return configs;  // change this
     }
 }
