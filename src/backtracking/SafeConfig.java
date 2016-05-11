@@ -81,10 +81,7 @@ public class SafeConfig implements Configuration {
             i+=1;
         }
         return spots;
-    public SafeConfig(String filename)
-    {
-        // TODO
-    }
+
 
     @Override
     public Collection<Configuration> getSuccessors()
@@ -98,7 +95,7 @@ public class SafeConfig implements Configuration {
         for (int row=this.currentrow;row<this.model.getRSize();row++){
             for (int col=0;col<this.model.getCSize();col++){
                 if (map[row][col].equals("X")){
-                    String[] spots=findspace(row,col);
+                    String[]spots=findspace(row,col);
                     if(spots.length>0){
                         for (int i=0;i<spots.length;i++){
                             Scanner sc = new Scanner(spots[i]);
@@ -158,8 +155,7 @@ public class SafeConfig implements Configuration {
     }
 
     @Override
-    public boolean isValid()
-    {
+    public boolean isValid(){
         // TODO
         String point;
         for (int row = 0; row <this.model.getRSize(); row++)
