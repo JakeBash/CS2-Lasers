@@ -54,6 +54,18 @@ public class SafeConfig implements Configuration
     /**
      * Returns the current safe configuration
      */
+    private String[][] lasers;
+
+    /**
+     *
+     * Returns the location of lasers being used by a pillar
+     */
+    private int currentpillar;
+
+    /**
+     *
+     *  Returns the value of the current pillar we are on.
+     */
     public String[][] getBoard()
     {
         return b;
@@ -82,14 +94,26 @@ public class SafeConfig implements Configuration
         curRow = 0;
         curCol = -1;
         in.nextLine();
+        int numberofpillars=0;
         b = new String[rsize][csize];
         for (int row=0; row < rsize; row++)
         {
             for (int col = 0; col < csize; col++)
             {
                 b[row][col] = in.next();
+                if (b[row][col].matches("[0-9]")||b[row][col].matches("[0-9]")){
+                    numberofpillars+=1;
+                }
             }
         }
+        lasers = new String[numberofpillars][8];
+        for (int row=0; row < numberofpillars; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                lasers[row][col]=null;
+            }}
+        currentpillar=0;
         in.close();
     }
 
@@ -113,6 +137,8 @@ public class SafeConfig implements Configuration
                 b[row][col] = other.b[row][col];
             }
         }
+        this.lasers = other.lasers;
+        this.currentpillar=other.currentpillar;
     }
 
     /**
