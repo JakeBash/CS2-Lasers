@@ -30,7 +30,8 @@ import model.*;
  * and receives updates from it.
  *
  * @author Sean Strout @ RIT CS
- * @author Jake Bashaw, Oscar Onyeke
+ * @author Jake Bashaw
+ * @author Oscar Onyeke
  */
 public class LasersGUI extends Application implements Observer
 {
@@ -42,7 +43,12 @@ public class LasersGUI extends Application implements Observer
     /**
      * Where the GUI object will be placed
      */
-    BorderPane mainPane = new BorderPane();
+    private BorderPane mainPane = new BorderPane();
+
+    /**
+     *
+     */
+    private Stage mainStage;
 
     @Override
     public void init() throws Exception
@@ -81,8 +87,6 @@ public class LasersGUI extends Application implements Observer
      */
     private void init(Stage stage)
     {
-        mainPane.setPrefHeight(300);
-        mainPane.setPrefWidth(600);
         mainPane.setTop(status());
         mainPane.setCenter(grid());
         mainPane.setBottom(controls());
@@ -94,7 +98,8 @@ public class LasersGUI extends Application implements Observer
         init(primaryStage);
         primaryStage.setTitle("Lasers");
         primaryStage.setScene(new Scene(mainPane));
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
+        mainStage = primaryStage;
         primaryStage.show();
     }
 
@@ -107,9 +112,13 @@ public class LasersGUI extends Application implements Observer
     @Override
     public void update(Observable o, Object arg)
     {
-        mainPane.setTop(status());
-        mainPane.setCenter(grid());
-        mainPane.setBottom(controls());
+        BorderPane uPane = new BorderPane();
+        uPane.setTop(status());
+        uPane.setCenter(grid());
+        uPane.setBottom(controls());
+        Scene uScene = new Scene(uPane);
+        mainStage.setScene(uScene);
+
     }
 
     /**
@@ -134,7 +143,7 @@ public class LasersGUI extends Application implements Observer
         GridPane holder = new GridPane();
         holder.setVgap(10);
         holder.setHgap(10);
-        holder.setPadding(new Insets(30,0,30,0));
+        holder.setPadding(new Insets(30,50,30,50));
         holder.setAlignment(Pos.CENTER);
         for(int r = 0; r < model.getRSize(); r++)
         {
@@ -146,22 +155,40 @@ public class LasersGUI extends Application implements Observer
                     Button b = new Button();
                     if(model.getRVer() == r && model.getCVer() == c)
                     {
+                        int row  = r;
+                        int col = c;
                         b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/pillar" + s + ".png"))));
                         setButtonBackground(b, "red.png");
                         model.setRVer(-1);
                         model.setCVer(-1);
+                        b.setOnAction(e -> {
+                            model.add(row, col);
+                            model.announceChange();
+                        });
                     }
                     else
                     {
+                        int row  = r;
+                        int col = c;
                         b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/pillar" + s + ".png"))));
                         setButtonBackground(b, "white.png");
+                        b.setOnAction(e -> {
+                            model.add(row, col);
+                            model.announceChange();
+                        });
                     }
                     holder.add(b, c, r);
                 }
                 else if(s.equals("X"))
                 {
+                    int row  = r;
+                    int col = c;
                     Button b = new Button();
                     b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/pillarX.png"))));
+                    b.setOnAction(e -> {
+                        model.add(row, col);
+                        model.announceChange();
+                    });
                     holder.add(b, c, r);
 
                 }
@@ -245,9 +272,11 @@ public class LasersGUI extends Application implements Observer
      */
     public Pane controls()
     {
+        GridPane holder = new GridPane();
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(0,50,15,50));
         hbox.setSpacing(16);
+
 
         ArrayList<Button> options = new ArrayList<>();
 
@@ -292,7 +321,10 @@ public class LasersGUI extends Application implements Observer
             HBox.setMargin(options.get(i), new Insets(0, 0, 0, 8));
             hbox.getChildren().add(options.get(i));
         }
-        return hbox;
+
+        holder.add(hbox, 0, 0);
+        holder.setAlignment(Pos.CENTER);
+        return holder;
     }
 
     public void load()

@@ -10,7 +10,8 @@ import java.util.Scanner;
  * This class handles all of the safe backend commands. Adding, removing, and
  * verifying safe configurations is done in this class.
  * @author Sean Strout @ RIT CS
- * @author Jake Bashaw, Oscar Onyeke
+ * @author Jake Bashaw
+ * @author Oscar Onyeke
  */
 public class LasersModel extends Observable
 {
@@ -57,15 +58,16 @@ public class LasersModel extends Observable
     public LasersModel(String filename)
     {
         Scanner in = null;
+        File file = new File(filename);
         try
         {
-            in = new Scanner(new File(filename));
+            in = new Scanner(file);
         }
         catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }
-        curMessage = filename + " loaded";
+        curMessage = file.getName()+ " loaded";
         curFile  = filename;
         rsize = in.nextInt();
         csize = in.nextInt();

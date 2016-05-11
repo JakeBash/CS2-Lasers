@@ -10,11 +10,16 @@ import java.util.List;
  *
  * @author Sean Strout @ RIT CS
  */
-public class SafeSolverPath {
-    public static void main(String[] args) throws FileNotFoundException {
-        if (args.length != 2) {
+public class SafeSolverPath
+{
+    public static void main(String[] args) throws FileNotFoundException
+    {
+        if (args.length != 2)
+        {
             System.out.println("Usage: java SafeSolverPath safe.in debug");
-        } else {
+        }
+        else
+        {
             // construct the initial configuration from the file
             Configuration init = new SafeConfig(args[0]);
 
@@ -33,16 +38,21 @@ public class SafeSolverPath {
                     (System.currentTimeMillis() - start)/1000.0 + " seconds.");
 
             // indicate whether there was a solution, or not
-            if (path != null) {
+            if (path != null)
+            {
                 int step = 0;
                 // loop through the configs from start to end and display them
-                for (Configuration config : path) {
+                for (Configuration config : path)
+                {
                     System.out.println("Step " + step + ":");
                     System.out.println(config);
                     ++step;
                 }
-            } else {
+            }
+            else
+            {
                 System.out.println("No solution!");
-            }        }
+            }
+        }
     }
 }

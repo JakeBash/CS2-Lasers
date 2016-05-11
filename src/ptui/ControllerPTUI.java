@@ -12,7 +12,8 @@ import java.util.Scanner;
  * the operations that are input in the run method.
  *
  * @author Sean Strout @ RIT CS
- * @author Jake Bashaw, Oscar Onyeke
+ * @author Jake Bashaw
+ * @author Oscar Onyeke
  */
 public class ControllerPTUI
 {

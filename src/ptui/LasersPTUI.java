@@ -11,7 +11,8 @@ import model.LasersModel;
  * You should create the model here, and then implement the update method.
  *
  * @author Sean Strout @ RIT CS
- * @author Jake Bashaw, Oscar Onyeke
+ * @author Jake Bashaw
+ * @author Oscar Onyeke
  */
 public class LasersPTUI implements Observer
 {
@@ -29,7 +30,8 @@ public class LasersPTUI implements Observer
     public LasersPTUI(String filename) throws FileNotFoundException
     {
         this.model = new LasersModel(filename);
-        model.addObserver(this);
+        this.model.addObserver(this);
+        this.model.announceChange();
     }
 
     /**

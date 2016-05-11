@@ -17,7 +17,8 @@ import java.util.Stack;
  * package and/or incorporate it into another class.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
+ * @author Jake Bashaw
+ * @author Oscar Onyeke
  */
 public class SafeConfig implements Configuration {
     Collection<Configuration> configs = new ArrayList<Configuration>();// lists of configurations
@@ -80,10 +81,14 @@ public class SafeConfig implements Configuration {
             i+=1;
         }
         return spots;
+    public SafeConfig(String filename)
+    {
+        // TODO
     }
 
     @Override
-    public Collection<Configuration> getSuccessors() {
+    public Collection<Configuration> getSuccessors()
+    {
         // TODO
         String[][] map=this.model.getBoard();
         if(isGoal()){
@@ -153,7 +158,8 @@ public class SafeConfig implements Configuration {
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isValid()
+    {
         // TODO
         String point;
         for (int row = 0; row <this.model.getRSize(); row++)
@@ -185,7 +191,8 @@ public class SafeConfig implements Configuration {
     }
 
     @Override
-    public boolean isGoal() {
+    public boolean isGoal()
+    {
         // TODO
         if(isValid()){
             for (int row = 0; row <this.model.getRSize(); row++)
