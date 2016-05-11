@@ -1,5 +1,8 @@
 package gui;
 
+import backtracking.Backtracker;
+import backtracking.Configuration;
+import backtracking.SafeConfig;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 
 import javafx.stage.Window;
 import model.*;
@@ -185,6 +189,7 @@ public class LasersGUI extends Application implements Observer
                     int col = c;
                     Button b = new Button();
                     b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/pillarX.png"))));
+                    setButtonBackground(b, "white.png");
                     b.setOnAction(e -> {
                         model.add(row, col);
                         model.announceChange();
@@ -224,12 +229,14 @@ public class LasersGUI extends Application implements Observer
             if(model.getRVer() == r && model.getCVer() == c)
             {
                 button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/red.png"))));
+                setButtonBackground(button, "white.png");
                 model.setRVer(-1);
                 model.setCVer(-1);
             }
             else
             {
                 button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("resources/white.png"))));
+                setButtonBackground(button, "white.png");
             }
             button.setOnAction(e -> {
                 model.add(r,c);
@@ -298,7 +305,18 @@ public class LasersGUI extends Application implements Observer
         Button solve = new Button("Solve");
         solve.setPrefSize(80, 20);
         solve.setOnMouseClicked(e -> {
-            // TODO
+            Configuration init = new SafeConfig(model.getCurFile());
+            Backtracker bt = new Backtracker(false);
+            Optional<Configuration> sol = bt.solve(init);
+            System.out.println(sol);
+            for (int row=0; row < model.getRSize(); row++)
+            {
+                for (int col = 0; col < model.getBoard()[row].length; col++)
+                {
+                    model.getBoard()[row][col] = sol.get().getBoard()[row][col];
+                }
+            }
+            model.announceChange();
         });
         options.add(solve);
 

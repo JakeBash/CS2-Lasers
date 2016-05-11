@@ -31,4 +31,6 @@ public interface Configuration
      * @return true if goal; false otherwise
      */
     public boolean isGoal();
+
+    public String[][] getBoard();
 }
