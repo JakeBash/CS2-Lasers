@@ -1,11 +1,11 @@
 package backtracking;
 
-import model.LasersModel;
-
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Scanner;
-import java.util.Stack;
 
 /**
  * The class represents a single configuration of a safe.  It is
@@ -20,192 +20,371 @@ import java.util.Stack;
  * @author Jake Bashaw
  * @author Oscar Onyeke
  */
-public class SafeConfig implements Configuration {
-    Collection<Configuration> configs = new ArrayList<Configuration>();// lists of configurations
-    LasersModel model ;//laser model
-    private int currentrow;
-    private int currentcol;
-    private boolean isdone=false;
+public class SafeConfig implements Configuration
+{
+    /**
+     * The board that the lasers are placed on
+     */
+    private String[][] b;
 
-    public SafeConfig(String filename) {
-        this.model = new LasersModel(filename);// creates the ;asermodel
-        this.currentrow=0;//ells us what the current row is
-        this.currentcol=0;// tells us what the current column is.
-        configs.add(this);
+    /**
+     * The amount of rows in the board
+     */
+    private int rsize;
+
+    /**
+     * The amount of columns in the board
+     */
+    private int csize;
+
+    /**
+     * The current status message
+     */
+    private String curMessage;
+
+    /**
+     * The current file being used
+     */
+    private String curFile;
+
+    /**
+     * The current row for getSuccessors
+     */
+    private int curRow;
+
+    /**
+     * The current column for getSuccessors
+     */
+    private int curCol;
+
+    /**
+     * Returns the current safe configuration
+     */
+    public String[][] getBoard()
+    {
+        return b;
     }
 
-    public SafeConfig(SafeConfig other){
-        this.model = other.model;
-        this.currentrow=other.currentrow;
-        this.currentcol=other.currentcol;
-    }
-
-    private String[] findspace(int r, int c){
-        String[]locations = new String[4];
-        int counter = 0;
-        if(r > 0)
+    public SafeConfig(String filename)
+    {
+        Scanner in = null;
+        File file = new File(filename);
+        try
         {
-            if(this.model.getBoard()[r-1][c].equals("."))
+            in = new Scanner(file);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        curMessage = file.getName()+ " loaded";
+        curFile  = filename;
+        rsize = in.nextInt();
+        csize = in.nextInt();
+        curRow = 0;
+        curCol = -1;
+        in.nextLine();
+        b = new String[rsize][csize];
+        for (int row=0; row < rsize; row++)
+        {
+            for (int col = 0; col < csize; col++)
             {
-                locations[counter]=""+(r-1)+"   "+c+"";
-                counter+=1;
+                b[row][col] = in.next();
             }
         }
-        if(r < this.model.getRSize()-1)
+        in.close();
+    }
+
+    public SafeConfig(SafeConfig other)
+    {
+        this.curMessage = other.curMessage;
+        this.curFile = other.curFile;
+        this.rsize = other.rsize;
+        this.csize = other.csize;
+        this.curRow = other.curRow;
+        this.curCol = other.curCol;
+        this.b = new String[rsize][csize];
+        for (int row=0; row < rsize; row++)
         {
-            if(this.model.getBoard()[r+1][c].equals("."))
+            for (int col = 0; col < csize; col++)
             {
-                locations[counter]=""+(r+1)+"   "+c+"";
-                counter+=1;
+                b[row][col] = other.b[row][col];
+            }
+        }
+    }
+
+    public void nexSpot()
+    {
+        curCol++;
+        if(curCol == csize)
+        {
+            curRow++;
+            curCol = 0;
+        }
+
+    }
+
+    public void addLaserBeam(int r, int c)
+    {
+        if(r > 0)
+        {
+            for(int row = r - 1; row >= 0; row--)
+            {
+                if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("L"))
+                {
+                    b[row][c] = "*";
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        if(r < rsize-1)
+        {
+            for(int row = r + 1; row < rsize; row++)
+            {
+                if(!b[row][c].equals("X") && !b[row][c].matches("[0-9]") && !b[row][c].equals("L"))
+                {
+                    b[row][c] = "*";
+                }
+                else
+                {
+                    break;
+                }
             }
         }
         if(c > 0)
         {
-            if(this.model.getBoard()[r][c-1].equals("."))
+            for(int col = c - 1; col >= 0; col--)
             {
-                locations[counter]=""+r+"   "+(c-1)+"";
-                counter+=1;
+                if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("L"))
+                {
+                    b[r][col] = "*";
+                }
+                else
+                {
+                    break;
+                }
             }
         }
-        if(c <this.model.getCSize()-1 )
+        if(c < csize-1)
         {
-            if(this.model.getBoard()[r][c+1].equals("."))
+            for(int col = c + 1; col < csize; col++)
             {
-                locations[counter]=""+r+"  "+(c+1)+"";
+                if(!b[r][col].equals("X") && !b[r][col].matches("[0-9]") && !b[r][col].equals("L"))
+                {
+                    b[r][col] = "*";
+                }
+                else
+                {
+                    break;
+                }
             }
         }
-        String[] spots = new String[counter];
-        int i=0;
-        while (i<counter){
-            spots[i]=locations[i];
-            i+=1;
-        }
-        return spots;
-
+    }
 
     @Override
     public Collection<Configuration> getSuccessors()
     {
-        // TODO
-        String[][] map=this.model.getBoard();
-        if(isGoal()){
-            isdone=true;
-            return configs;
+        ArrayList<Configuration> config = new ArrayList<>();
+        nexSpot();
+        if(curRow == rsize-1 && curCol == csize-1)
+        {
+            return config;
         }
-        for (int row=this.currentrow;row<this.model.getRSize();row++){
-            for (int col=0;col<this.model.getCSize();col++){
-                if (map[row][col].equals("X")){
-                    String[]spots=findspace(row,col);
-                    if(spots.length>0){
-                        for (int i=0;i<spots.length;i++){
-                            Scanner sc = new Scanner(spots[i]);
-                            int r = sc.nextInt();
-                            int c = sc.nextInt();
-                            this.model.add(r,c);
-                            if(this.model.laserVer(r,c)){
-                                SafeConfig safeConfig = new SafeConfig(this);
-                                configs.add(safeConfig);
-                                safeConfig.currentrow=row;
-                                configs.addAll(safeConfig.getSuccessors());
-                                if(isdone){
-                                    return configs;
-                                }
-                                else{
-                                    configs.remove(safeConfig);
-                                    this.model.remove(r,c);
-                                }
-                            }
-                            else {
-                                this.model.remove(r,c);
-                            }
-                        }
-                    }
-                }
-                else if(map[row][col].matches("[0-9]")&&!this.model.pillarVer(row,col)){
-                    String[] spots=findspace(row,col);
-                    if(spots.length>0){
-                        for (int i=0;i<spots.length;i++){
-                            Scanner sc = new Scanner(spots[i]);
-                            int r = sc.nextInt();
-                            int c = sc.nextInt();
-                            this.model.add(r,c);
-                            if(this.model.laserVer(r,c)){
-                                SafeConfig safeConfig = new SafeConfig(this);
-                                configs.add(safeConfig);
-                                safeConfig.currentrow=row;
-                                configs.addAll(safeConfig.getSuccessors());
-                                if(isdone){
-                                    return configs;
-                                }
-                                else{
-                                    configs.remove(safeConfig);
-                                    this.model.remove(r,c);
-                                }
-                            }
-                            else {
-                                this.model.remove(r,c);
-                            }
-                        }
-                    }
+        else if(b[curRow][curCol].equals("."))
+        {
+            SafeConfig newConfig = new SafeConfig(this);
+            newConfig.b[curRow][curCol] = "L";
+            newConfig.addLaserBeam(curRow, curCol);
+            config.add(newConfig);
+            SafeConfig blankConfig = new SafeConfig(this);
+            config.add(blankConfig);
+        }
+        else
+        {
+            SafeConfig newConfig = new SafeConfig(this);
+            config.add(newConfig);
+        }
+        return config;
+    }
 
-                }
+    /**
+     * Sees if a laser came in contact with another laser
+     *
+     * @param r The row where laser verification begins
+     * @param c The column where laser verification begins
+     */
+    public boolean laserVer(int r, int c)
+    {
+        String [] pillars = new String[] {"1","2","3","4","X"};
+        for(int i=r;i<rsize;i++)
+        {
+            if(this.b[i][c].equals("L")&&i!=r)
+            {
+                return false;
+            }
+            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            {
+                i=rsize;
             }
         }
-        return configs;
+        for(int i=r;i>=0;i--)
+        {
+            if(this.b[i][c].equals("L")&&i!=r)
+            {
+                return false;
+            }
+            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            {
+                i=-1;
+            }
+        }
+        for(int i=c;i<csize;i++)
+        {
+            if(this.b[r][i].equals("L")&&i!=c)
+            {
+                return false;
+            }
+            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            {
+                i=csize;
+            }
+        }
+        for(int i=c;i>=0;i--)
+        {
+            if(this.b[r][i].equals("L")&&i!=c)
+            {
+                return false;
+            }
+            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            {
+                i=-1;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks a pillar too see if has <= the number of lasers surrounding
+     * it
+     *
+     * @param r The row where verification begins
+     * @param c The column where verification begins
+     */
+    public boolean pillarVer(int r, int c)
+    {
+        int count = 0;
+        if(r > 0)
+        {
+            if(b[r-1][c].equals("L"))
+            {
+                count++;
+            }
+        }
+        if(r < rsize-1)
+        {
+            if(b[r+1][c].equals("L"))
+            {
+                count++;
+            }
+        }
+        if(c > 0)
+        {
+            if(b[r][c-1].equals("L"))
+            {
+                count++;
+            }
+        }
+        if(c < csize-1)
+        {
+            if(b[r][c+1].equals("L"))
+            {
+                count++;
+            }
+        }
+        if(count <= Integer.parseInt(b[r][c]))
+        {
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public boolean isValid(){
-        // TODO
+    public boolean isValid()
+    {
         String point;
-        for (int row = 0; row <this.model.getRSize(); row++)
+        for (int row = 0; row < rsize; row++)
         {
-            for (int col = 0; col < this.model.getCSize(); col++)
+            for (int col = 0; col < csize; col++)
             {
-                point = this.model.getBoard()[row][col];
-                if(point.equals("L"))
+                point = b[row][col];
+                if(point.equals("."))
                 {
-                    if(!this.model.laserVer(row,col))
+
+                }
+                else if(point.equals("L"))
+                {
+                    if(!laserVer(row,col))
                     {
                         return false;
                     }
                 }
                 if(point.matches("[0-9]"))
                 {
-                    if(!this.model.pillarVer(row, col))
+                    if(!pillarVer(row, col))
                     {
                         return false;
                     }
                 }
-                if (point.equals(".")){
-                    return false;
-                }
             }
         }
-
         return true;
     }
 
     @Override
     public boolean isGoal()
     {
-        // TODO
-        if(isValid()){
-            for (int row = 0; row <this.model.getRSize(); row++)
-            {
-                for (int col = 0; col < this.model.getCSize(); col++)
-                {
-                    String l = this.model.getBoard()[row][col];
-                    if(l.equals("."))
-                    {
-                        return false;
-                    }
-                }
-            }
+        if(curRow == rsize-1 && curCol == csize-1)
+        {
+            return true;
         }
-        else{
+        else
+        {
             return false;
         }
-        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        String s = " ";
+        for (int i = 0; i < (2*csize) - 1; i++)
+        {
+            s += "-";
+        }
+        s += "\n";
+        for (int i = 0; i < rsize; i++)
+        {
+            s += "|";
+            for(int j = 0; j < csize; j++)
+            {
+                s += b[i][j];
+                if( j < csize-1)
+                {
+                    s+= " ";
+                }
+            }
+            s += "|";
+            s += "\n";
+        }
+        s += " ";
+        for (int i = 0; i < (2*csize) - 1; i++)
+        {
+            s += "-";
+        }
+        s += "\n";
+        return s;
     }
 }

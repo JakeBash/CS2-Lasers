@@ -98,6 +98,6 @@ public class Backtracker
     public List<Configuration> solveWithPath(Configuration current)
     {
         // TODO
-        return new ArrayList<>();  // change this
+        return new ArrayList<>();  // change this+
     }
 }
