@@ -3,7 +3,6 @@ package backtracking;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Scanner;
 
@@ -38,11 +37,6 @@ public class SafeConfig implements Configuration
     private int csize;
 
     /**
-     * The current status message
-     */
-    private String curMessage;
-
-    /**
      * The current file being used
      */
     private String curFile;
@@ -65,6 +59,11 @@ public class SafeConfig implements Configuration
         return b;
     }
 
+    /**
+     * Creates a new safe configuration from a given file
+     *
+     * @param filename The name of the file that configuration is created from
+     */
     public SafeConfig(String filename)
     {
         Scanner in = null;
@@ -77,7 +76,6 @@ public class SafeConfig implements Configuration
         {
             e.printStackTrace();
         }
-        curMessage = file.getName()+ " loaded";
         curFile  = filename;
         rsize = in.nextInt();
         csize = in.nextInt();
@@ -95,9 +93,13 @@ public class SafeConfig implements Configuration
         in.close();
     }
 
+    /**
+     * Deep copy constructor for safeConfig
+     *
+     * @param other The configuration that you are making a deep copy of
+     */
     public SafeConfig(SafeConfig other)
     {
-        this.curMessage = other.curMessage;
         this.curFile = other.curFile;
         this.rsize = other.rsize;
         this.csize = other.csize;
@@ -113,6 +115,9 @@ public class SafeConfig implements Configuration
         }
     }
 
+    /**
+     * Helper method to advance the indexes for getSuccessors()
+     */
     public void nexSpot()
     {
         curCol++;
@@ -124,6 +129,13 @@ public class SafeConfig implements Configuration
 
     }
 
+    /**
+     * Adds laser beams from a specific starting point in the four cardinal
+     * directions
+     *
+     * @param r The row where beam adding begins
+     * @param c The row where column adding begins
+     */
     public void addLaserBeam(int r, int c)
     {
         if(r > 0)
@@ -184,6 +196,9 @@ public class SafeConfig implements Configuration
         }
     }
 
+    /**
+     * Get the collection of successors from the current one
+     */
     @Override
     public Collection<Configuration> getSuccessors()
     {
@@ -208,6 +223,19 @@ public class SafeConfig implements Configuration
             config.add(newConfig);
             SafeConfig blankConfig = new SafeConfig(this);
             config.add(blankConfig);
+        }
+        else if(b[curRow][curCol].equals("4"))
+        {
+            SafeConfig newConfig = new SafeConfig(this);
+            newConfig.b[curRow+1][curCol] = "L";
+            newConfig.b[curRow-1][curCol] = "L";
+            newConfig.b[curRow][curCol+1] = "L";
+            newConfig.b[curRow][curCol-1] = "L";
+            newConfig.addLaserBeam(curRow+1, curCol);
+            newConfig.addLaserBeam(curRow-1, curCol);
+            newConfig.addLaserBeam(curRow, curCol+1);
+            newConfig.addLaserBeam(curRow, curCol-1);
+            config.add(newConfig);
         }
         else
         {
@@ -329,6 +357,10 @@ public class SafeConfig implements Configuration
         return count <= Integer.parseInt(b[r][c]);
     }
 
+    /**
+     * Returns true if the current configuration has all valid laser placements,
+     * false otherwise
+     */
     @Override
     public boolean isValid()
     {
@@ -357,72 +389,80 @@ public class SafeConfig implements Configuration
         return true;
     }
 
+    /**
+     * Checks a pillar too see if has <= the number of lasers surrounding
+     * it
+     *
+     * @param r The row where verification begins
+     * @param c The column where verification begins
+     */
+    public boolean goalPillar(int r, int c)
+    {
+        int count = 0;
+        if(r > 0)
+        {
+            if(b[r-1][c].equals("L"))
+            {
+                count++;
+            }
+        }
+        if(r < rsize-1)
+        {
+            if(b[r+1][c].equals("L"))
+            {
+                count++;
+            }
+        }
+        if(c > 0)
+        {
+            if(b[r][c-1].equals("L"))
+            {
+                count++;
+            }
+        }
+        if(c < csize-1)
+        {
+            if(b[r][c+1].equals("L"))
+            {
+                count++;
+            }
+        }
+        return count == Integer.parseInt(b[r][c]);
+    }
+
+    /**
+     * Return true if the current configuration is a goal configuration,
+     * false otherwise
+     */
     @Override
     public boolean isGoal()
     {
-        for (int r=0; r < rsize; r++)
+        String point;
+        for (int row = 0; row < rsize; row++)
         {
-            for (int c = 0; c < csize; c++)
+            for (int col = 0; col < csize; col++)
             {
-                String point;
-                for (int row = 0; row < b.length; row++)
+                point = b[row][col];
+                if(point.equals("."))
                 {
-                    for (int col = 0; col < b[row].length; col++)
+                    return false;
+                }
+                else if(point.equals("L"))
+                {
+                    if(!laserVer(row,col))
                     {
-                        point = b[row][col];
-                        if(point.equals("."))
-                        {
-                            return false;
-                        }
-                        else if(point.equals("L"))
-                        {
-                            if(!laserVer(row,col))
-                            {
-                                return false;
-                            }
-                        }
-                        if(point.matches("[0-9]"))
-                        {
-                            if(!pillarVer(row, col))
-                            {
-                                return false;
-                            }
-                        }
+                        return false;
+                    }
+                }
+                if(point.matches("[0-9]"))
+                {
+                    if(!goalPillar(row, col))
+                    {
+                        return false;
                     }
                 }
             }
         }
         return true;
-    }
-    @Override
-    public String toString()
-    {
-        String s = " ";
-        for (int i = 0; i < (2*csize) - 1; i++)
-        {
-            s += "-";
-        }
-        s += "\n";
-        for (int i = 0; i < rsize; i++)
-        {
-            s += "|";
-            for(int j = 0; j < csize; j++)
-            {
-                s += b[i][j];
-                if( j < csize-1)
-                {
-                    s+= " ";
-                }
-            }
-            s += "|";
-            s += "\n";
-        }
-        s += " ";
-        for (int i = 0; i < (2*csize) - 1; i++)
-        {
-            s += "-";
-        }
-        s += "\n";
-        return s;
     }
 }

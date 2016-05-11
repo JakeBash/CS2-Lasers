@@ -12,20 +12,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
-
-import javafx.stage.Window;
 import model.*;
 
 /**
@@ -305,17 +298,7 @@ public class LasersGUI extends Application implements Observer
         Button solve = new Button("Solve");
         solve.setPrefSize(80, 20);
         solve.setOnMouseClicked(e -> {
-            Configuration init = new SafeConfig(model.getCurFile());
-            Backtracker bt = new Backtracker(false);
-            Optional<Configuration> sol = bt.solve(init);
-            System.out.println(sol);
-            for (int row=0; row < model.getRSize(); row++)
-            {
-                for (int col = 0; col < model.getBoard()[row].length; col++)
-                {
-                    model.getBoard()[row][col] = sol.get().getBoard()[row][col];
-                }
-            }
+            solve();
             model.announceChange();
         });
         options.add(solve);
@@ -343,6 +326,28 @@ public class LasersGUI extends Application implements Observer
         holder.add(hbox, 0, 0);
         holder.setAlignment(Pos.CENTER);
         return holder;
+    }
+
+    public void solve()
+    {
+        Configuration init = new SafeConfig(model.getCurFile());
+        Backtracker bt = new Backtracker(false);
+        Optional<Configuration> sol = bt.solve(init);
+        if(sol.isPresent())
+        {
+            for (int row=0; row < model.getRSize(); row++)
+            {
+                for (int col = 0; col < model.getBoard()[row].length; col++)
+                {
+                    model.getBoard()[row][col] = sol.get().getBoard()[row][col];
+                }
+            }
+            model.setCurMessage("Safe is solved!");
+        }
+        else
+        {
+            model.setCurMessage("No solution present!");
+        }
     }
 
     public void load()

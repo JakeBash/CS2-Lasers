@@ -2,7 +2,6 @@ package model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Observable;
 import java.util.Scanner;
 
@@ -108,25 +107,6 @@ public class LasersModel extends Observable
         return rsize;
     }
 
-    /**
-     * Sets the row of the bad verification
-     *
-     * @param num The number that is used to set
-     */
-    public void setRVer(int num)
-    {
-        rVer = num;
-    }
-
-    /**
-     * Sets the column of the bad verification
-     *
-     * @param num The number that is used to set
-     */
-    public void setCVer(int num)
-    {
-        cVer = num;
-    }
 
     /**
      * Returns the column size of the safe
@@ -158,6 +138,34 @@ public class LasersModel extends Observable
     public String[][] getBoard()
     {
         return b;
+    }
+
+    /**
+     * Sets the row of the bad verification
+     *
+     * @param num The number that is used to set
+     */
+    public void setRVer(int num)
+    {
+        rVer = num;
+    }
+
+    /**
+     * Sets the column of the bad verification
+     *
+     * @param num The number that is used to set
+     */
+    public void setCVer(int num)
+    {
+        cVer = num;
+    }
+
+    /**
+     * Sets the current message (Only used when solving with backtracker)
+     */
+    public void setCurMessage(String message)
+    {
+        curMessage = message;
     }
 
     /**
@@ -365,9 +373,9 @@ public class LasersModel extends Observable
     public void verify()
     {
         String point;
-        for (int row = 0; row < b.length; row++)
+        for (int row = 0; row < rsize; row++)
         {
-            for (int col = 0; col < b[row].length; col++)
+            for (int col = 0; col < csize; col++)
             {
                 point = b[row][col];
                 if(point.equals("."))
