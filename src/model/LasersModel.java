@@ -410,49 +410,64 @@ public class LasersModel extends Observable
      */
     public boolean laserVer(int r, int c)
     {
-        String [] pillars = new String[] {"1","2","3","4","X"};
-        for(int i=r;i<rsize;i++)
+        for(int row = r-1; row > 0; row--)
         {
-            if(this.b[i][c].equals("L")&&i!=r)
+            if(b[row][c].equals("L"))
             {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            else if(b[row][c].equals("*"))
             {
-                i=rsize;
+                continue;
+            }
+            else
+            {
+                break;
             }
         }
-        for(int i=r;i>=0;i--)
+        for(int row = r+1; row < rsize; row++)
         {
-            if(this.b[i][c].equals("L")&&i!=r)
+            if(b[row][c].equals("L"))
             {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            else if(b[row][c].equals("*"))
             {
-                i=-1;
+                continue;
+            }
+            else
+            {
+                break;
             }
         }
-        for(int i=c;i<csize;i++)
+        for(int col = c-1; col > 0; col--)
         {
-            if(this.b[r][i].equals("L")&&i!=c)
+            if(b[r][col].equals("L"))
             {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            else if(b[r][col].equals("*"))
             {
-                i=csize;
+                continue;
+            }
+            else
+            {
+                break;
             }
         }
-        for(int i=c;i>=0;i--)
+        for(int col = c+1; col < csize; col++)
         {
-            if(this.b[r][i].equals("L")&&i!=c)
+            if(b[r][col].equals("L"))
             {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            else if(b[r][col].equals("*"))
             {
-                i=-1;
+                continue;
+            }
+            else
+            {
+                break;
             }
         }
         return true;

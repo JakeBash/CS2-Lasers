@@ -215,9 +215,16 @@ public class SafeConfig implements Configuration
     {
         ArrayList<Configuration> config = new ArrayList<>();
         nexSpot();
-        if(curRow == rsize-1 && curCol == csize-1)
+        if(curRow == rsize || curCol == csize)
         {
             return config;
+        }
+        else if(curRow == rsize-1 && curCol == csize-1)
+        {
+            SafeConfig newConfig = new SafeConfig(this);
+            newConfig.b[curRow][curCol] = "L";
+            newConfig.addLaserBeam(curRow, curCol);
+            config.add(newConfig);
         }
         else if(b[curRow][curCol].equals("."))
         {
@@ -244,49 +251,64 @@ public class SafeConfig implements Configuration
      */
     public boolean laserVer(int r, int c)
     {
-        String [] pillars = new String[] {"1","2","3","4","X"};
-        for(int i=r;i<rsize;i++)
+        for(int row = r-1; row > 0; row--)
         {
-            if(this.b[i][c].equals("L")&&i!=r)
+            if(b[row][c].equals("L"))
             {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            else if(b[row][c].equals("*"))
             {
-                i=rsize;
+                continue;
+            }
+            else
+            {
+                break;
             }
         }
-        for(int i=r;i>=0;i--)
+        for(int row = r+1; row < rsize; row++)
         {
-            if(this.b[i][c].equals("L")&&i!=r)
+            if(b[row][c].equals("L"))
             {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            else if(b[row][c].equals("*"))
             {
-                i=-1;
+                continue;
+            }
+            else
+            {
+                break;
             }
         }
-        for(int i=c;i<csize;i++)
+        for(int col = c-1; col > 0; col--)
         {
-            if(this.b[r][i].equals("L")&&i!=c)
+            if(b[r][col].equals("L"))
             {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            else if(b[r][col].equals("*"))
             {
-                i=csize;
+                continue;
+            }
+            else
+            {
+                break;
             }
         }
-        for(int i=c;i>=0;i--)
+        for(int col = c+1; col < csize; col++)
         {
-            if(this.b[r][i].equals("L")&&i!=c)
+            if(b[r][col].equals("L"))
             {
                 return false;
             }
-            else if(Arrays.asList(pillars).contains(this.b[i][c]))
+            else if(b[r][col].equals("*"))
             {
-                i=-1;
+                continue;
+            }
+            else
+            {
+                break;
             }
         }
         return true;
@@ -330,11 +352,7 @@ public class SafeConfig implements Configuration
                 count++;
             }
         }
-        if(count <= Integer.parseInt(b[r][c]))
-        {
-            return true;
-        }
-        return false;
+        return count <= Integer.parseInt(b[r][c]);
     }
 
     @Override
@@ -346,18 +364,14 @@ public class SafeConfig implements Configuration
             for (int col = 0; col < csize; col++)
             {
                 point = b[row][col];
-                if(point.equals("."))
-                {
-
-                }
-                else if(point.equals("L"))
+                if(point.equals("L"))
                 {
                     if(!laserVer(row,col))
                     {
                         return false;
                     }
                 }
-                if(point.matches("[0-9]"))
+                else if(point.matches("[0-9]"))
                 {
                     if(!pillarVer(row, col))
                     {
@@ -372,16 +386,40 @@ public class SafeConfig implements Configuration
     @Override
     public boolean isGoal()
     {
-        if(curRow == rsize-1 && curCol == csize-1)
+        for (int r=0; r < rsize; r++)
         {
-            return true;
+            for (int c = 0; c < csize; c++)
+            {
+                String point;
+                for (int row = 0; row < b.length; row++)
+                {
+                    for (int col = 0; col < b[row].length; col++)
+                    {
+                        point = b[row][col];
+                        if(point.equals("."))
+                        {
+                            return false;
+                        }
+                        else if(point.equals("L"))
+                        {
+                            if(!laserVer(row,col))
+                            {
+                                return false;
+                            }
+                        }
+                        if(point.matches("[0-9]"))
+                        {
+                            if(!pillarVer(row, col))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
         }
-        else
-        {
-            return false;
-        }
+        return true;
     }
-
     @Override
     public String toString()
     {
