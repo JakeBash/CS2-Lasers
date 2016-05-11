@@ -43,10 +43,13 @@ public class LasersGUI extends Application implements Observer
     private BorderPane mainPane = new BorderPane();
 
     /**
-     *
+     * A copy of the stage used to handle resizing of game window
      */
     private Stage mainStage;
 
+    /**
+     * Method given to us in skeleton
+     */
     @Override
     public void init() throws Exception
     {
@@ -89,6 +92,11 @@ public class LasersGUI extends Application implements Observer
         mainPane.setBottom(controls());
     }
 
+    /**
+     * Creates the main game window
+     *
+     * @param primaryStage The main game window that is in use
+     */
     @Override
     public void start(Stage primaryStage) throws Exception
     {
@@ -328,6 +336,9 @@ public class LasersGUI extends Application implements Observer
         return holder;
     }
 
+    /**
+     * Handles updating the safe to a solved state, also changes status message
+     */
     public void solve()
     {
         Configuration init = new SafeConfig(model.getCurFile());
@@ -350,6 +361,9 @@ public class LasersGUI extends Application implements Observer
         }
     }
 
+    /**
+     * Opens and loads a file that the user choose from a popup window
+     */
     public void load()
     {
         FileChooser fileChooser = new FileChooser();
