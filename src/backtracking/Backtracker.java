@@ -1,7 +1,5 @@
 package backtracking;
 
- import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -67,37 +65,18 @@ public class Backtracker
         }
         else
         {
-            for (Configuration child : config.getSuccessors())
-            {
-                if (child.isValid())
-                {
+            for (Configuration child : config.getSuccessors()) {
+                if (child.isValid()) {
                     debugPrint("\tValid successor", child);
                     Optional<Configuration> sol = solve(child);
-                    if (sol.isPresent())
-                    {
+                    if (sol.isPresent()) {
                         return sol;
                     }
-                }
-                else
-                {
+                } else {
                     debugPrint("\tInvalid successor", child);
                 }
             }
-            // implicit backtracking happens here
         }
         return Optional.empty();
-    }
-
-    /**
-     * Find a goal configuration if it exists, and how to get there.
-     *
-     * @param current the starting configuration
-     * @return a list of configurations to get to a goal configuration.
-     * If there are none, return null.
-     */
-    public List<Configuration> solveWithPath(Configuration current)
-    {
-        // TODO
-        return new ArrayList<>();  // change this+
     }
 }

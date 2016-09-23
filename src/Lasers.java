@@ -1,7 +1,5 @@
 import javafx.application.Application;
-
 import java.io.FileNotFoundException;
-
 import gui.LasersGUI;
 import ptui.ControllerPTUI;
 import ptui.LasersPTUI;

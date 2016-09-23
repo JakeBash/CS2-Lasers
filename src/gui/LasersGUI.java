@@ -296,13 +296,6 @@ public class LasersGUI extends Application implements Observer
         });
         options.add(check);
 
-        Button hint = new Button("Hint");
-        hint.setPrefSize(80, 20);
-        hint.setOnMouseClicked(e -> {
-            // TODO
-        });
-        options.add(hint);
-
         Button solve = new Button("Solve");
         solve.setPrefSize(80, 20);
         solve.setOnMouseClicked(e -> {
