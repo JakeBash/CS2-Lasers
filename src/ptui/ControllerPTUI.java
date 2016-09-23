@@ -14,7 +14,7 @@ import java.util.Scanner;
  * @author Jake Bashaw
  * @author Oscar Onyeke
  */
-public class ControllerPTUI
+public class  ControllerPTUI
 {
     /**
      * Boolean to track whether or not the program is running.
