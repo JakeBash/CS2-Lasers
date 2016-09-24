@@ -2,7 +2,7 @@ CS2 Lasers Project
 
 - The 2nd of two projects completed in Computer Science II @ RIT. Completed with my partner Oscar Onyeke. 
 - The goal of the project was to create a Minesweeper-esque game called Lasers where the player would place
-lasers on a grid with pilalrs filling some spaces on the grid. The goal was to fill every spot in the grid 
+lasers on a grid with pillars filling some spaces on the grid. The goal was to fill every spot in the grid 
 that wasn't already occupied by a pillar with a laser or laser beam. Certain pillars would only allow for a
 certain number of lasers to be placed in their immediate vicinity. The game could be played from both a JavaFX
 GUI or from a Plain Text UI. Players could add/remove lasers in any open spot on the grid, as well as check if
