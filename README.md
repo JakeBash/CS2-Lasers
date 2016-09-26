@@ -1,6 +1,6 @@
-CS2 Lasers Project
+oCS2 Lasers Project
 
-- The 2nd of two projects completed in Computer Science II @ RIT. Completed with my partner Oscar Onyeke. 
+- The 2nd of two projects completed in Computer Science II @ RIT. Completed with one other classmate 
 - The goal of the project was to create a Minesweeper-esque game called Lasers where the player would place
 lasers on a grid with pillars filling some spaces on the grid. The goal was to fill every spot in the grid 
 that wasn't already occupied by a pillar with a laser or laser beam. Certain pillars would only allow for a
