@@ -335,7 +335,7 @@ public class LasersGUI extends Application implements Observer
     public void solve()
     {
         Configuration init = new SafeConfig(model.getCurFile());
-        Backtracker bt = new Backtracker(false);
+        Backtracker bt = new Backtracker();
         Optional<Configuration> sol = bt.solve(init);
         if(sol.isPresent())
         {

@@ -18,35 +18,12 @@ import java.util.Optional;
  */
 public class Backtracker
 {
-    private boolean debug;
-
     /**
      * Initialize a new backtracker.
-     *
-     * @param debug Is debugging output enabled?
      */
-    public Backtracker(boolean debug)
+    public Backtracker()
     {
-        this.debug = debug;
-        if (this.debug)
-        {
-            System.out.println("Backtracker debugging enabled...");
-        }
-    }
 
-    /**
-     * A utility routine for printing out various debug messages.
-     *
-     * @param msg    The type of config being looked at (current, goal,
-     *               successor, e.g.)
-     * @param config The config to display
-     */
-    private void debugPrint(String msg, Configuration config)
-    {
-        if (this.debug)
-        {
-            System.out.println(msg + ":\n" + config);
-        }
     }
 
     /**
@@ -57,23 +34,21 @@ public class Backtracker
      */
     public Optional<Configuration> solve(Configuration config)
     {
-        debugPrint("Current config", config);
         if (config.isGoal())
         {
-            debugPrint("\tGoal config", config);
             return Optional.of(config);
         }
         else
         {
-            for (Configuration child : config.getSuccessors()) {
-                if (child.isValid()) {
-                    debugPrint("\tValid successor", child);
+            for (Configuration child : config.getSuccessors())
+            {
+                if (child.isValid())
+                {
                     Optional<Configuration> sol = solve(child);
-                    if (sol.isPresent()) {
+                    if (sol.isPresent())
+                    {
                         return sol;
                     }
-                } else {
-                    debugPrint("\tInvalid successor", child);
                 }
             }
         }

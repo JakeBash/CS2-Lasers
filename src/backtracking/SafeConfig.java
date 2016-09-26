@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
+import model.LasersModel;
 
 /**
  * The class represents a single configuration of a safe.  It is
@@ -94,9 +95,9 @@ public class SafeConfig implements Configuration
         curRow = 0;
         curCol = -1;
         in.nextLine();
-        int numberofpillars=0;
+        int numberofpillars = 0;
         b = new String[rsize][csize];
-        for (int row=0; row < rsize; row++)
+        for (int row = 0; row < rsize; row++)
         {
             for (int col = 0; col < csize; col++)
             {
@@ -107,13 +108,13 @@ public class SafeConfig implements Configuration
             }
         }
         lasers = new String[numberofpillars][8];
-        for (int row=0; row < numberofpillars; row++)
+        for (int row = 0; row < numberofpillars; row++)
         {
             for (int col = 0; col < 8; col++)
             {
                 lasers[row][col]=null;
             }}
-        currentpillar=0;
+        currentpillar = 0;
         in.close();
     }
 
@@ -130,7 +131,7 @@ public class SafeConfig implements Configuration
         this.curRow = other.curRow;
         this.curCol = other.curCol;
         this.b = new String[rsize][csize];
-        for (int row=0; row < rsize; row++)
+        for (int row = 0; row < rsize; row++)
         {
             for (int col = 0; col < csize; col++)
             {
@@ -138,7 +139,7 @@ public class SafeConfig implements Configuration
             }
         }
         this.lasers = other.lasers;
-        this.currentpillar=other.currentpillar;
+        this.currentpillar = other.currentpillar;
     }
 
     /**
@@ -416,47 +417,6 @@ public class SafeConfig implements Configuration
     }
 
     /**
-     * Checks a pillar too see if has <= the number of lasers surrounding
-     * it
-     *
-     * @param r The row where verification begins
-     * @param c The column where verification begins
-     */
-    public boolean goalPillar(int r, int c)
-    {
-        int count = 0;
-        if(r > 0)
-        {
-            if(b[r-1][c].equals("L"))
-            {
-                count++;
-            }
-        }
-        if(r < rsize-1)
-        {
-            if(b[r+1][c].equals("L"))
-            {
-                count++;
-            }
-        }
-        if(c > 0)
-        {
-            if(b[r][c-1].equals("L"))
-            {
-                count++;
-            }
-        }
-        if(c < csize-1)
-        {
-            if(b[r][c+1].equals("L"))
-            {
-                count++;
-            }
-        }
-        return count == Integer.parseInt(b[r][c]);
-    }
-
-    /**
      * Return true if the current configuration is a goal configuration,
      * false otherwise
      */
@@ -482,7 +442,7 @@ public class SafeConfig implements Configuration
                 }
                 if(point.matches("[0-9]"))
                 {
-                    if(!goalPillar(row, col))
+                    if(!pillarVer(row, col))
                     {
                         return false;
                     }
